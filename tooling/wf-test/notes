@@ -1,0 +1,6 @@
+
+cd server-side
+mvn clean install wildfly:deploy
+
+cd client
+mvn compile exec:exec
