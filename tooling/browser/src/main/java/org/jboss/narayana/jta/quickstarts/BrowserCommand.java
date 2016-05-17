@@ -20,7 +20,12 @@
  */
 package org.jboss.narayana.jta.quickstarts;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
 
@@ -37,10 +42,13 @@ import com.arjuna.common.internal.util.propertyservice.BeanPopulator;
 import javax.management.*;
 
 public abstract class BrowserCommand {
+    private static final String SYNTAX = "syntax: [-s <store location>] | [-f <command file>] | [-c <command>]";
+
     private static String currentStoreDir;// = "/home/mmusgrov/tmp/tx-object-store";
     private static ObjStoreBrowser osb;
     private static String currentType = "";
     private static List<String> recordTypes = new ArrayList<String> ();
+    private static InputStream cmdSource;
 
     private enum CommandName {
         HELP("show command options and syntax"),
@@ -75,10 +83,81 @@ public abstract class BrowserCommand {
         return getCommand(CommandName.HELP);
     }
 
-    public static void main(String[] args) throws Exception {
-        BrowserCommand.getCommand(CommandName.START).execute(new PrintStream(System.out, true), Arrays.asList(args));
+    private static void parseArgs(String[] args) throws FileNotFoundException {
+        String validOpts = "fsc";
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].startsWith("-")) {
+                if (i + 1 >= args.length || args[i].length() != 2 || validOpts.indexOf(args[i].charAt(1)) == -1)
+                    throw new IllegalArgumentException(SYNTAX);
+
+                switch (args[i++].charAt(1)) {
+                    case 'f':
+                        File f = validateFile(args[i], false);
+                        Scanner s = new Scanner(new FileInputStream(f));
+
+                        while (s.hasNext()) {
+                            String ln = s.nextLine();
+
+                            if (!setCurrentStoreDir(ln))
+                                sb.append(ln.trim()).append(System.lineSeparator());
+                        }
+
+                        break;
+                    case 's':
+                        currentStoreDir = args[i];
+
+                        break;
+                    case 'c':
+                        if (!setCurrentStoreDir(args[i]))
+                            sb.append(args[i].trim()).append(System.lineSeparator());
+
+                        break;
+                    default:
+                        throw new IllegalArgumentException(SYNTAX);
+                }
+            }
+        }
+
+        if (currentStoreDir == null)
+            currentStoreDir = BeanPopulator.getDefaultInstance(ObjectStoreEnvironmentBean.class).getObjectStoreDir();
+
+        validateFile(currentStoreDir, true);
+
+        if (cmdSource == null)
+            cmdSource = sb.length() == 0 ? System.in : new ByteArrayInputStream(sb.toString().getBytes());
     }
 
+    private static File validateFile(String name, boolean isDir) {
+        File f = new File(name);
+
+        if (!f.exists() || !(isDir ^ f.isFile()))
+            throw new IllegalArgumentException(name + " is not a valid " + (isDir ? " directory" : "file"));
+
+        return f;
+    }
+
+    private static boolean setCurrentStoreDir(String val) {
+        if (val.trim().toUpperCase().startsWith(CommandName.STORE_DIR.name())) {
+            String[] aa = val.split("\\s+");
+
+            if (aa.length < 2)
+                throw new IllegalArgumentException("Invalid syntax for command " + CommandName.STORE_DIR.name());
+
+            currentStoreDir = aa[1];
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        parseArgs(args);
+        BrowserCommand.getCommand(CommandName.START).execute(new PrintStream(System.out, true), null);
+    }
 
     CommandName name;
     boolean verbose;
@@ -88,6 +167,7 @@ public abstract class BrowserCommand {
     }
 
     abstract void execute(PrintStream printStream, List<String> args) throws Exception;
+
     protected void help(PrintStream printStream) {
         if (name.cmdHelp != null)
             printStream.printf("%s - %s%n", name.name().toLowerCase(), name.cmdHelp);
@@ -105,7 +185,11 @@ public abstract class BrowserCommand {
         BeanPopulator.getNamedInstance(ObjectStoreEnvironmentBean.class, "communicationStore").setObjectStoreDir(storeDir);
         BeanPopulator.getDefaultInstance(CoreEnvironmentBean.class).setNodeIdentifier("no-recovery");
 
+        System.setProperty(ObjStoreBrowser.OBJ_STORE_BROWSER_HANDLERS,
+                "com.arjuna.ats.internal.jta.tools.osb.mbean.jts.JTSXAResourceRecordWrapper=com.arjuna.ats.internal.jta.tools.osb.mbean.jts.JTSXAResourceRecordWrapper");
+
         osb = new ObjStoreBrowser(storeDir);
+        osb.setExposeAllRecordsAsMBeans(true);
         osb.start(); // only required if we want to use JMX
     }
 
@@ -124,15 +208,13 @@ public abstract class BrowserCommand {
 
                 @Override
                 void execute(PrintStream printStream, List<String> args) throws Exception {
-                    if (args.size() == 0)
-                        currentStoreDir = BeanPopulator.getDefaultInstance(ObjectStoreEnvironmentBean.class).getObjectStoreDir();
-                    else
-                        currentStoreDir = args.get(0);
-
                     setupStore(currentStoreDir);
 
                     RecoveryManager.manager(RecoveryManager.INDIRECT_MANAGEMENT).suspend(true);
-                    Scanner scanner = new Scanner(System.in);
+                    Scanner scanner = new Scanner(cmdSource);
+
+                    getCommand(CommandName.PROBE).execute(printStream, null);
+                    getCommand(CommandName.TYPES).execute(printStream, null);
 
                     while (!finished)
                         processCommand(printStream, scanner);
@@ -143,6 +225,10 @@ public abstract class BrowserCommand {
 
                 protected boolean cancel() {
                     finished = true;
+                    try {
+                        cmdSource.close();
+                    } catch (IOException ignore) {
+                    }
                     return true;
                 }
 
@@ -185,7 +271,7 @@ public abstract class BrowserCommand {
             new BrowserCommand(CommandName.PROBE) {
 
                 @Override
-                void execute(PrintStream printStream, List<String> args) {
+                void execute(PrintStream printStream, List<String> args) throws Exception {
                     osb.probe();
                 }
             },
