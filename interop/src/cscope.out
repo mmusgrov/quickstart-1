@@ -1,0 +1,7436 @@
+cscope 15 $HOME/source/forks/narayana/quickstart/interop/src               0000038331
+	@d.sh
+
+2 [ "x$JBOSS_HOME" = "x" ]; 
+th’
+
+
+3 
+	gJBOSS_HOME
+=~/
+sourû
+/
+fÜks
+/
+Ç¿yªa
+/
+jboss
+-
+as
+/
+bud
+/
+rg‘
+/
+wdæy
+-10.1.0.F
+š®
+-
+SNAPSHOT
+
+
+4 
+fi
+
+
+5 [ ! -
+d
+ "$JBOSS_HOME" ]; 
+th’
+ 
+	gecho
+ "fnÙ found: $JBOSS_HOME"; 
+	gex™
+ 1; 
+fi
+
+
+7 
+	gWF_DEPLOY_DIR
+=
+$JBOSS_HOME
+/
+¡ªd®Úe
+/
+d•loym’ts
+
+
+8 
+WF2_DEPLOY_DIR
+=
+$WF_DEPLOY_DIR
+/../
+£rv”2
+/
+¡ªd®Úe
+/
+d•loym’ts
+
+
+9 #WL_CP=/
+u01
+/
+­p
+/
+Üaşe
+/
+MiddËw¬e
+/
+O¿şe_Home
+/
+wl£rv”
+/
+£rv”
+/
+lib
+/
+weblogic
+.
+j¬
+
+
+11 
+	$u§ge
+() {
+
+12 
+echo
+ -
+e
+ "$1: Usage: $0 [-a <gf|gf2|wf>] [-f <archive>] [-t <gfgf|gfwf|wfgf >] [-t <haltbefore|haltafter>]" 1>&2;
+
+13 
+echo
+ -
+e
+ "examples:"
+
+14 
+echo
+ -
+e
+ "\t$0 -t wfgf # send‡ message from wfo gf"
+
+15 
+echo
+ -
+e
+ "\t$0 -t wfgf -t halt # send‡ message from wfo gf‡ndhen halt gf"
+
+16 
+echo
+ -
+e
+ "\t$0 -a wf1 -f interop/target/ejbtest.war # deploy‡n‡rchiveo wildfly"
+
+17 
+echo
+ -
+e
+ "$0 -a gf1 -f„ecovery/target/dummy-resource-recovery.jar # deploy‡n‡rchiveo WildFly"
+
+18 
+ex™
+ 1;
+
+19 
+	}
+}
+
+21 
+	$™e¡
+() {
+
+22 
+how
+=
+x
+
+
+23 [ 
+$
+#-
+gt
+ 1 ] && 
+how
+=
+$2
+
+
+25 
+$1
+ 
+š
+
+
+26 
+gfgf
+è
+cu¾
+ 
+h‰p
+:
+
+27 
+gfwf
+è
+cu¾
+ 
+h‰p
+:
+
+28 
+wfgf
+è
+cu¾
+ 
+h‰p
+:
+
+29 
+wfwf
+è
+cu¾
+ 
+h‰p
+:
+
+31 
+e§c
+
+
+33 
+ex™
+ 
+$
+?
+
+34 
+	}
+}
+
+36 
+g‘İts
+ "t:a:f:" 
+o
+; do
+
+37 "${o}" 
+š
+
+
+38 
+	gt
+è
+	gŸrgs
++=("$OPTARG");;
+
+39 
+	ga
+èa=
+$
+{
+OPTARG
+};;
+
+40 
+	gf
+èf=
+$
+{
+OPTARG
+};;
+
+41 *è
+	gu§ge
+;;
+
+42 
+e§c
+
+
+43 
+	gdÚe
+
+
+45 [ 
+$
+{#Ÿrgs[@]} !ğ0 ] && 
+™e¡
+ ${
+Ÿrgs
+[*]}
+
+47 [ 
+$f
+ ] || 
+u§ge
+ "missing file"
+
+49 
+$a
+ 
+š
+
+
+50 
+gf
+è
+a§dmš
+ --
+pÜt
+ 4848 
+d•loy
+ --
+fÜû
+=
+Œue
+ 
+$f
+
+
+51 
+a§dmš
+ --
+pÜt
+ 4948 
+d•loy
+ --
+fÜû
+=
+Œue
+ 
+$f
+
+
+53 
+	gwf
+è
+ı
+ 
+$f
+ 
+$WF_DEPLOY_DIR
+
+
+54 
+ı
+ 
+$f
+ 
+	g$WF2_DEPLOY_DIR
+
+
+56 
+	gwf1
+è
+ı
+ 
+$f
+ 
+	g$WF_DEPLOY_DIR
+;; #8080 3528
+
+57 
+	ggf1
+è
+	ga§dmš
+ --
+	gpÜt
+ 4848 
+	gd•loy
+ --
+	gfÜû
+=
+Œue
+ 
+$f
+;;
+
+59 
+	ggf2
+è
+	ga§dmš
+ --
+	gpÜt
+ 4948 
+	gd•loy
+ --
+	gfÜû
+=
+Œue
+ 
+$f
+;;
+
+60 
+	gwf2
+è
+ı
+ 
+$f
+ 
+	g$WF2_DEPLOY_DIR
+;; #9280 3628
+
+61 *è
+	gu§ge
+ "missing‡s"
+
+62 
+	ge§c
+
+
+	@interop/src/main/java/service/Controller.java
+
+1 
+·ckage
+ 
+	g£rviû
+;
+
+3 
+impÜt
+ 
+	gjavax
+.
+	gšjeù
+.
+	gInjeù
+;
+
+4 
+impÜt
+ 
+	gjavax
+.
+	gws
+.
+	grs
+.
+	gDeçuÉV®ue
+;
+
+5 
+impÜt
+ 
+	gjavax
+.
+	gws
+.
+	grs
+.
+	gGET
+;
+
+6 
+impÜt
+ 
+	gjavax
+.
+	gws
+.
+	grs
+.
+	gP©h
+;
+
+7 
+impÜt
+ 
+	gjavax
+.
+	gws
+.
+	grs
+.
+	gP©hP¬am
+;
+
+8 
+impÜt
+ 
+	gjavax
+.
+	gws
+.
+	grs
+.
+	gcÜe
+.
+	gRe¥Ú£
+;
+
+10 @
+P©h
+("/")
+
+11 
+public
+ cÏs 
+	cCÚŒŞËr
+ {
+
+12 @
+Injeù
+
+
+13 
+CÚŒŞËrB—n
+ 
+	m£rviû
+;
+
+15 @
+	mGET
+
+
+16 @
+P©h
+("/local/{arg}")
+
+17 
+public
+ 
+SŒšg
+ 
+g‘LoÿlNextCouÁ
+(@
+DeçuÉV®ue
+(""è@
+P©hP¬am
+("¬g"èSŒšg 
+¬g
+) {
+
+18  "Next: " + 
+	m£rviû
+.
+g‘Next
+(
+Œue
+, 
+¬g
+);
+
+21 @
+	gGET
+
+
+22 @
+P©h
+("/remote/{jndiPort}")
+
+23 
+public
+ 
+Re¥Ú£
+ 
+g‘RemÙeNextCouÁ
+(@
+DeçuÉV®ue
+("0"è@
+P©hP¬am
+("jndiPÜt"è
+jndiPÜt
+) {
+
+24  
+g‘RemÙeNextCouÁW™hASAndE¼Ü
+(
+jndiPÜt
+, 
+nuÎ
+,‚ull);
+
+27 @
+	gGET
+
+
+28 @
+P©h
+("/remote/{jndiPort}/{as}/{failureType}")
+
+29 
+public
+ 
+Re¥Ú£
+ 
+g‘RemÙeNextCouÁW™hASAndE¼Ü
+(
+
+30 @
+DeçuÉV®ue
+("0"è@
+P©hP¬am
+("jndiPÜt"è
+jndiPÜt
+,
+
+31 @
+DeçuÉV®ue
+(""è@
+P©hP¬am
+("as"è
+SŒšg
+ 
+as
+,
+
+32 @
+P©hP¬am
+("çu»Ty³"è
+SŒšg
+ 
+çu»Ty³
+) {
+
+33  
+	gRe¥Ú£
+.
+¡©us
+(200)
+
+34 .
+’t™y
+("Next: " + 
+£rviû
+.
+g‘Next
+(
+çl£
+, 
+as
+, 
+jndiPÜt
+, 
+çu»Ty³
+))
+
+35 .
+bud
+();
+
+	@interop/src/main/java/service/ControllerBean.java
+
+1 
+·ckage
+ 
+	g£rviû
+;
+
+3 
+impÜt
+ 
+	gÜg
+.
+	gomg
+.
+	gCORBA
+.
+	gORB
+;
+
+4 
+impÜt
+ 
+	g£rviû
+.
+	g»mÙe
+.
+	gISessiÚ
+;
+
+5 
+impÜt
+ 
+	g£rviû
+.
+	g»mÙe
+.
+	gISessiÚHome
+;
+
+7 
+impÜt
+ 
+	gjavax
+.
+	gªnÙ©iÚ
+.
+	gPo¡CÚ¡ruù
+;
+
+8 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gS‹Ëss
+;
+
+9 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚA‰ribu‹
+;
+
+10 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚA‰ribu‹Ty³
+;
+
+11 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚMªagem’t
+;
+
+12 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚMªagem’tTy³
+;
+
+13 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gCÚ‹xt
+;
+
+14 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gIn™ŸlCÚ‹xt
+;
+
+15 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gNamšgExû±iÚ
+;
+
+17 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gPrİ”t›s
+;
+
+19 @
+T¿n§ùiÚMªagem’t
+(
+T¿n§ùiÚMªagem’tTy³
+.
+CONTAINER
+)
+
+20 @
+S‹Ëss
+
+
+21 
+public
+ cÏs 
+	cCÚŒŞËrB—n
+ {
+
+23 
+´iv©e
+ 
+boŞ—n
+ 
+	misWF
+;
+
+25 @
+Po¡CÚ¡ruù
+
+
+26 
+public
+ 
+	$š™
+() {
+
+27 
+isWF
+ = 
+Sy¡em
+.
+	`g‘Prİ”ty
+("jboss.node.Çme"è!ğ
+nuÎ
+;
+
+28 
+Sy¡em
+.
+	`£tPrİ”ty
+("com.sun.CORBA.ORBUseDynamicStub", "true");
+
+31 @
+	$T¿n§ùiÚA‰ribu‹
+(
+T¿n§ùiÚA‰ribu‹Ty³
+.
+REQUIRED
+)
+
+32 
+public
+ 
+SŒšg
+ 
+	$g‘Next
+(
+boŞ—n
+ 
+loÿl
+, 
+SŒšg
+ 
+¬g
+) {
+
+33  
+	`g‘Next
+(
+loÿl
+, 
+nuÎ
+, 0, 
+¬g
+);
+
+34 
+	}
+}
+
+36 @
+	$T¿n§ùiÚA‰ribu‹
+(
+T¿n§ùiÚA‰ribu‹Ty³
+.
+REQUIRED
+)
+
+37 
+public
+ 
+SŒšg
+ 
+	$g‘Next
+(
+boŞ—n
+ 
+loÿl
+, 
+SŒšg
+ 
+as
+, 
+jndiPÜt
+, SŒšg 
+çu»Ty³
+) {
+
+38 
+Œy
+ {
+
+39 
+boŞ—n
+ 
+’li¡Aá”
+ = 
+çu»Ty³
+ !ğ
+nuÎ
+ && fau»Ty³.
+	`cÚšs
+("after");
+
+41 ià(!
+’li¡Aá”
+)
+
+42 
+TxnH–³r
+.
+	`addResourûs
+(
+isWF
+);
+
+44 
+SŒšg
+ 
+»s
+ = "";
+
+45 
+ISessiÚ
+ 
+ejb
+ : 
+	`g‘S”viûEJBs
+(
+loÿl
+, 
+as
+, 
+jndiPÜt
+))
+
+46 
+»s
+ = 
+ejb
+.
+	`g‘Next
+(
+çu»Ty³
+);
+
+48 ià(
+’li¡Aá”
+)
+
+49 
+TxnH–³r
+.
+	`addResourûs
+(
+isWF
+);
+
+51  
+»s
+;
+
+52 } 
+	`ÿtch
+ (
+Exû±iÚ
+ 
+e
+) {
+
+53  
+e
+.
+	`g‘Mes§ge
+();
+
+55 
+	}
+}
+
+57 
+´iv©e
+ 
+	gISessiÚ
+[] 
+	$g‘S”viûEJBs
+(
+boŞ—n
+ 
+loÿl
+, 
+SŒšg
+ 
+as
+, 
+jndiPÜt
+) {
+
+58 ià(!
+loÿl
+ && !
+isWF
+ && 
+as
+ !ğ
+nuÎ
+ &&‡s.
+	`cÚšs
+("gf") &&‡s.contains("wf")) {
+
+59 
+ISessiÚ
+[] 
+ejbs
+ = 
+Ãw
+ ISession[2];
+
+60 
+ejbs
+[0] = 
+	`g‘S”viûEJB
+(
+çl£
+, "gf", 
+jndiPÜt
+);
+
+61 
+ejbs
+[1] = 
+	`g‘S”viûEJB
+(
+çl£
+, "wf", 
+jndiPÜt
+);
+
+63  
+ejbs
+;
+
+65  
+Ãw
+ 
+ISessiÚ
+[] {
+	`g‘S”viûEJB
+(
+loÿl
+, 
+as
+, 
+jndiPÜt
+)};
+
+67 
+	}
+}
+
+69 
+´iv©e
+ 
+	$v®id©eJndiPÜt
+(
+jndiPÜt
+, 
+deçuÉPÜt
+) {
+
+70  (
+jndiPÜt
+ <ğ0 ? 
+deçuÉPÜt
+ : jndiPort);
+
+71 
+	}
+}
+
+73 
+´iv©e
+ 
+ISessiÚ
+ 
+	$g‘S”viûEJB
+(
+boŞ—n
+ 
+loÿl
+, 
+SŒšg
+ 
+as
+, 
+jndiPÜt
+) {
+
+75 
+SŒšg
+ 
+Çme
+ = "java:global/ejbtest/SessionBean!service.remote.ISessionHome";
+
+76 
+Prİ”t›s
+ 
+’v
+ = 
+Ãw
+ 
+	`Prİ”t›s
+();
+
+78 ià(!
+loÿl
+) {
+
+79 ià(
+isWF
+) {
+
+81 ià("wf".
+	`equ®s
+(
+as
+)) {
+
+82 
+jndiPÜt
+ = 
+	`v®id©eJndiPÜt
+(jndiPort, 3628);
+
+84 
+Çme
+ = "ejbtest/SessionBean";
+
+86 
+jndiPÜt
+ = 
+	`v®id©eJndiPÜt
+(jndiPort, 7001);
+
+89 
+’v
+.
+	`put
+(
+CÚ‹xt
+.
+PROVIDER_URL
+, 
+SŒšg
+.
+	`fÜm©
+("cÜb®oc::loÿlho¡:%d/NameS”viû", 
+jndiPÜt
+));
+
+90 
+’v
+.
+	`put
+(
+CÚ‹xt
+.
+INITIAL_CONTEXT_FACTORY
+, "org.wildfly.iiop.openjdk.naming.jndi.CNCtxFactory");
+
+94 ià("gf".
+	`equ®s
+(
+as
+)) {
+
+96 
+jndiPÜt
+ = 
+	`v®id©eJndiPÜt
+(jndiPort, 3700);
+
+98 
+’v
+.
+	`put
+(
+CÚ‹xt
+.
+INITIAL_CONTEXT_FACTORY
+, "com.sun.enterprise.naming.SerialInitContextFactory");
+
+99 
+’v
+.
+	`£tPrİ”ty
+("org.omg.CORBA.ORBInitialHost", "localhost");
+
+100 
+’v
+.
+	`£tPrİ”ty
+("Üg.omg.CORBA.ORBIn™ŸlPÜt", 
+SŒšg
+.
+	`v®ueOf
+(
+jndiPÜt
+));
+
+103 
+Çme
+ = "ejbtest/SessionBean";
+
+105 
+jndiPÜt
+ = 
+	`v®id©eJndiPÜt
+(jndiPort, 3528);
+
+107 
+’v
+.
+	`put
+(
+CÚ‹xt
+.
+PROVIDER_URL
+, 
+SŒšg
+.
+	`fÜm©
+("iiİ://loÿlho¡:%d", 
+jndiPÜt
+));
+
+108 
+’v
+.
+	`put
+(
+CÚ‹xt
+.
+INITIAL_CONTEXT_FACTORY
+, "com.sun.jndi.cosnaming.CNCtxFactory");
+
+110 
+Œy
+ {
+
+111 
+ORB
+ 
+Üb
+ = (ORBè
+Ãw
+ 
+	`In™ŸlCÚ‹xt
+().
+	`lookup
+("java:comp/ORB");
+
+112 
+’v
+.
+	`put
+("java.Çmšg.cÜba.Üb", 
+Üb
+);
+
+113 } 
+	`ÿtch
+ (
+NamšgExû±iÚ
+ 
+e
+) {
+
+114 
+throw
+ 
+Ãw
+ 
+	`RuÁimeExû±iÚ
+(
+e
+);
+
+120 
+Œy
+ {
+
+121 
+Sy¡em
+.
+out
+.
+	`´štf
+("lookšg u°% vŸ…Üˆ%d%n", 
+Çme
+, 
+jndiPÜt
+);
+
+122 
+In™ŸlCÚ‹xt
+ 
+ùx
+ = 
+Ãw
+ 
+	`In™ŸlCÚ‹xt
+(
+’v
+);
+
+124 
+Objeù
+ 
+oRef
+ = 
+ùx
+.
+	`lookup
+(
+Çme
+);
+
+125 
+ISessiÚHome
+ 
+home
+ = (ISessiÚHomeè
+oRef
+;
+
+127  
+home
+.
+	`ü—‹
+();
+
+128 } 
+	`ÿtch
+ (
+Exû±iÚ
+ 
+e
+) {
+
+129 
+e
+.
+	`´štSckT¿û
+();
+
+132  
+nuÎ
+;
+
+133 
+	}
+}
+
+	@interop/src/main/java/service/SessionBean.java
+
+1 
+·ckage
+ 
+	g£rviû
+;
+
+3 
+impÜt
+ 
+	g£rviû
+.
+	g»mÙe
+.
+	gISessiÚHome
+;
+
+5 
+impÜt
+ 
+	gjavax
+.
+	gªnÙ©iÚ
+.
+	gPo¡CÚ¡ruù
+;
+
+6 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gRemÙeHome
+;
+
+8 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gS‹Ëss
+;
+
+10 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚA‰ribu‹
+;
+
+11 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚA‰ribu‹Ty³
+;
+
+12 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚMªagem’t
+;
+
+13 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gT¿n§ùiÚMªagem’tTy³
+;
+
+14 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gNamšgExû±iÚ
+;
+
+16 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gcÚcu¼’t
+.
+	g©omic
+.
+	gAtomicIÁeg”
+;
+
+18 @
+	gS‹Ëss
+
+
+21 @
+RemÙeHome
+(
+ISessiÚHome
+.
+şass
+)
+
+22 @
+	$T¿n§ùiÚMªagem’t
+(
+T¿n§ùiÚMªagem’tTy³
+.
+CONTAINER
+)
+
+23 
+public
+ cÏs 
+	cSessiÚB—n
+ {
+
+24 
+AtomicIÁeg”
+ 
+couÁ”
+ = 
+Ãw
+ 
+	`AtomicIÁeg”
+(0);
+
+25 
+boŞ—n
+ 
+isWF
+;
+
+27 @
+Po¡CÚ¡ruù
+
+
+28 
+public
+ 
+	$š™
+() {
+
+29 
+isWF
+ = 
+Sy¡em
+.
+	`g‘Prİ”ty
+("jboss.node.Çme"è!ğ
+nuÎ
+;
+
+31 
+couÁ”
+.
+	`£t
+(
+isWF
+ ? 8000 : 7000);
+
+40 @
+	$T¿n§ùiÚA‰ribu‹
+(
+T¿n§ùiÚA‰ribu‹Ty³
+.
+MANDATORY
+)
+
+41 
+public
+ 
+SŒšg
+ 
+	$g‘Next
+() {
+
+42  
+	`g‘Next
+(
+nuÎ
+);
+
+43 
+	}
+}
+
+45 @
+	$T¿n§ùiÚA‰ribu‹
+(
+T¿n§ùiÚA‰ribu‹Ty³
+.
+MANDATORY
+)
+
+46 
+public
+ 
+SŒšg
+ 
+	$g‘Next
+(
+SŒšg
+ 
+çu»Ty³
+) {
+
+47 
+Œy
+ {
+
+48 
+TxnH–³r
+.
+	`addResourûs
+(
+isWF
+, 
+çu»Ty³
+);
+
+50 
+Sy¡em
+.
+out
+.
+	`´štf
+("% »tuºšg‚exˆcouÁ”%n", 
+this
+);
+
+51  
+SŒšg
+.
+	`v®ueOf
+(
+couÁ”
+.
+	`g‘AndInüem’t
+());
+
+52 } 
+	`ÿtch
+ (
+Exû±iÚ
+ 
+e
+) {
+
+53 
+throw
+ 
+Ãw
+ 
+	`RuÁimeExû±iÚ
+(
+e
+.
+	`g‘Mes§ge
+());
+
+55 
+	}
+}
+
+	@interop/src/main/java/service/TxnHelper.java
+
+1 
+·ckage
+ 
+	g£rviû
+;
+
+3 
+impÜt
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+.
+	gASFau»Mode
+;
+
+4 
+impÜt
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+.
+	gASFau»S³c
+;
+
+5 
+impÜt
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+.
+	gASFau»Ty³
+;
+
+6 
+impÜt
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+.
+	gDummyXAResourû
+;
+
+8 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gIn™ŸlCÚ‹xt
+;
+
+9 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gNamšgExû±iÚ
+;
+
+10 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gRŞlbackExû±iÚ
+;
+
+11 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gSy¡emExû±iÚ
+;
+
+12 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gT¿n§ùiÚ
+;
+
+13 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gT¿n§ùiÚMªag”
+;
+
+14 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gxa
+.
+	gXAResourû
+;
+
+16 
+public
+ cÏs 
+	cTxnH–³r
+ {
+
+17 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	mWL_TM
+ = "weblogic.transaction.TransactionManager";
+
+18 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	mEE_TM
+ = "java:/TransactionManager";
+
+19 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	mGF_TM
+ = "java:appserver/TransactionManager";
+
+21 
+	$addResourûs
+(
+boŞ—n
+ 
+isWF
+è
+throws
+ 
+NamšgExû±iÚ
+, 
+Sy¡emExû±iÚ
+, 
+RŞlbackExû±iÚ
+ {
+
+22 
+	`addResourûs
+(
+isWF
+, 
+nuÎ
+);
+
+25 
+	$addResourûs
+(
+boŞ—n
+ 
+isWF
+, 
+SŒšg
+ 
+çu»Ty³
+è
+throws
+ 
+NamšgExû±iÚ
+, 
+Sy¡emExû±iÚ
+, 
+RŞlbackExû±iÚ
+ {
+
+29 
+T¿n§ùiÚMªag”
+ 
+tm
+ = 
+	`g‘T¿n§ùiÚMªag”
+(
+isWF
+);
+
+31 
+as£¹
+ 
+tm
+.
+	`g‘T¿n§ùiÚ
+(è!ğ
+nuÎ
+;
+
+33 
+tm
+.
+	`g‘T¿n§ùiÚ
+().
+	`’li¡Resourû
+(
+	`g‘Resourû
+Ñm, 
+çu»Ty³
+));
+
+34 
+	}
+}
+
+54 
+T¿n§ùiÚMªag”
+ 
+	$g‘T¿n§ùiÚMªag”
+(
+boŞ—n
+ 
+isWF
+è
+throws
+ 
+NamšgExû±iÚ
+ {
+
+55 ià(
+isWF
+)
+
+56  (
+T¿n§ùiÚMªag”
+è
+Ãw
+ 
+	`In™ŸlCÚ‹xt
+().
+	`lookup
+(
+EE_TM
+);
+
+58  (
+T¿n§ùiÚMªag”
+è
+Ãw
+ 
+	`In™ŸlCÚ‹xt
+().
+	`lookup
+(
+GF_TM
+);
+
+59 
+	}
+}
+
+61 
+T¿n§ùiÚ
+ 
+	$g‘T¿n§ùiÚ
+(
+boŞ—n
+ 
+isWF
+è
+throws
+ 
+NamšgExû±iÚ
+, 
+Sy¡emExû±iÚ
+ {
+
+62  
+	`g‘T¿n§ùiÚMªag”
+(
+isWF
+).
+	`g‘T¿n§ùiÚ
+();
+
+63 
+	}
+}
+
+65 
+´iv©e
+ 
+DummyXAResourû
+ 
+	$g‘Resourû
+(
+T¿n§ùiÚMªag”
+ 
+tm
+, 
+SŒšg
+ 
+çu»Ty³
+) {
+
+66 ià(
+çu»Ty³
+ =ğ
+nuÎ
+ || 
+tm
+ ==‚ull)
+
+67  
+Ãw
+ 
+	`DummyXAResourû
+();
+
+69 
+Sy¡em
+.
+out
+.
+	`´štf
+("’li¡šg dummy„esourû w™h fauÉy³ %s%n", 
+çu»Ty³
+);
+
+71 ià(
+çu»Ty³
+.
+	`cÚšs
+("halt"))
+
+72  
+Ãw
+ 
+	`DummyXAResourû
+Òew 
+	`ASFau»S³c
+("çuÉ", 
+ASFau»Mode
+.
+HALT
+, "", 
+ASFau»Ty³
+.
+XARES_COMMIT
+));
+
+74  
+Ãw
+ 
+	`DummyXAResourû
+Òew 
+	`ASFau»S³c
+("", 
+ASFau»Mode
+.
+NONE
+, "", 
+ASFau»Ty³
+.NONE));
+
+75 
+	}
+}
+
+	@interop/src/main/java/service/local/ISession.java
+
+1 
+·ckage
+ 
+	g£rviû
+.
+	gloÿl
+;
+
+3 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gLoÿl
+;
+
+6 @
+Loÿl
+
+
+7 
+public
+ 
+š‹rçû
+ 
+ISessiÚ
+ 
+ex‹nds
+ 
+	g£rviû
+.
+	g»mÙe
+.
+	gISessiÚ
+ {
+
+	@interop/src/main/java/service/remote/ISession.java
+
+1 
+·ckage
+ 
+	g£rviû
+.
+	g»mÙe
+;
+
+3 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gRemÙe
+;
+
+4 
+impÜt
+ 
+	gjava
+.
+	grmi
+.
+	gRemÙeExû±iÚ
+;
+
+7 
+public
+ 
+š‹rçû
+ 
+ISessiÚ
+ 
+ex‹nds
+ 
+	gjavax
+.
+	gejb
+.
+	gEJBObjeù
+ {
+
+8 
+SŒšg
+ 
+g‘Next
+(è
+throws
+ 
+	gRemÙeExû±iÚ
+;
+
+10 
+SŒšg
+ 
+g‘Next
+(SŒšg 
+çu»Ty³
+è
+throws
+ 
+	gRemÙeExû±iÚ
+;
+
+	@interop/src/main/java/service/remote/ISessionHome.java
+
+1 
+·ckage
+ 
+	g£rviû
+.
+	g»mÙe
+;
+
+3 
+public
+ 
+š‹rçû
+ 
+ISessiÚHome
+ 
+ex‹nds
+ 
+	gjavax
+.
+	gejb
+.
+	gEJBHome
+ {
+
+4 
+public
+ 
+	g£rviû
+.
+	g»mÙe
+.
+ISessiÚ
+ 
+ü—‹
+(è
+throws
+ 
+	gjava
+.
+	grmi
+.
+	gRemÙeExû±iÚ
+;
+
+	@recovery/src/main/java/org/jboss/narayana/RecoveryBean.java
+
+1 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+3 
+impÜt
+ 
+	gjavax
+.
+	gªnÙ©iÚ
+.
+	gPo¡CÚ¡ruù
+;
+
+4 
+impÜt
+ 
+	gjavax
+.
+	gªnÙ©iÚ
+.
+	gP»De¡roy
+;
+
+5 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gScheduË
+;
+
+6 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gSšgËtÚ
+;
+
+7 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gS¹up
+;
+
+9 
+impÜt
+ 
+	gcom
+.
+	g¬juÇ
+.
+	g©s
+.¬juÇ.
+	g»cov”y
+.
+	gRecov”yMªag”
+;
+
+10 
+impÜt
+ 
+	gcom
+.
+	g¬juÇ
+.
+	g©s
+.¬juÇ.
+	g»cov”y
+.
+	gRecov”yModuË
+;
+
+11 
+impÜt
+ 
+	gcom
+.
+	g¬juÇ
+.
+	g©s
+.
+	gj
+.
+	g»cov”y
+.
+	gS”ŸlizabËXAResourûDe£rŸliz”
+;
+
+12 
+impÜt
+ 
+	gcom
+.
+	g¬juÇ
+.
+	g©s
+.
+	gj
+.
+	g»cov”y
+.
+	gXAResourûRecov”yH–³r
+;
+
+14 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gIn™ŸlCÚ‹xt
+;
+
+15 
+impÜt
+ 
+	gjavax
+.
+	gÇmšg
+.
+	gNamšgExû±iÚ
+;
+
+16 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gT¿n§ùiÚMªag”
+;
+
+17 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gxa
+.
+	gXAResourû
+;
+
+18 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gIOExû±iÚ
+;
+
+19 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gObjeùIÅutSŒ—m
+;
+
+20 
+impÜt
+ 
+	gjava
+.
+	gÏng
+.
+	g»æeù
+.
+	gF›ld
+;
+
+21 
+impÜt
+ 
+	gjava
+.
+	gÏng
+.
+	g»æeù
+.
+	gInvoÿtiÚT¬g‘Exû±iÚ
+;
+
+22 
+impÜt
+ 
+	gjava
+.
+	gÏng
+.
+	g»æeù
+.
+	gM‘hod
+;
+
+23 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gA¼ays
+;
+
+24 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gCŞËùiÚs
+;
+
+25 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gEnum”©iÚ
+;
+
+26 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gVeùÜ
+;
+
+28 
+impÜt
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+.
+	gDummyXAResourû
+;
+
+30 @
+	gSšgËtÚ
+
+
+31 @
+S¹up
+
+
+32 
+public
+ cÏs 
+	cRecov”yB—n
+ 
+im¶em’ts
+ 
+	mRecov”yRegi¡¿tiÚ
+ {
+
+33 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	mEE_TM
+ = "java:/TransactionManager";
+
+34 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	mGF_TM
+ = "java:appserver/TransactionManager";
+
+35 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	mWL_TM
+ = "weblogic.transaction.TransactionManager";
+
+36 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	mXAR_NAME
+ = "Dummy";
+
+38 
+´iv©e
+ 
+boŞ—n
+ 
+	m»gi¡”ed
+;
+
+39 
+´iv©e
+ 
+boŞ—n
+ 
+	misWF
+;
+
+40 
+´iv©e
+ 
+S”ŸlizabËXAResourûDe£rŸliz”
+ 
+	mde£rŸliz”
+;
+
+41 
+´iv©e
+ 
+XAResourûRecov”yH–³r
+ 
+	mx¬H–³r
+;
+
+43 @
+Po¡CÚ¡ruù
+
+
+44 
+´iv©e
+ 
+	$š™
+() {
+
+45 
+Sy¡em
+.
+out
+.
+	`´štf
+("registering RecoveryBean%n");
+
+46 
+isWF
+ = 
+Sy¡em
+.
+	`g‘Prİ”ty
+("jboss.node.Çme"è!ğ
+nuÎ
+;
+
+48 ià(
+isWF
+) {
+
+49 
+de£rŸliz”
+ = 
+Ãw
+ 
+	`S”ŸlizabËXAResourûDe£rŸliz”
+() {
+
+50 @
+Ov”ride
+
+
+51 
+public
+ 
+boŞ—n
+ 
+	`ÿnDe£rŸlze
+(
+SŒšg
+ 
+şassName
+) {
+
+52  
+Œue
+;
+
+55 @
+Ov”ride
+
+
+56 
+public
+ 
+XAResourû
+ 
+	`de£rŸlze
+(
+ObjeùIÅutSŒ—m
+ 
+ois
+è
+throws
+ 
+IOExû±iÚ
+, 
+CÏssNÙFoundExû±iÚ
+ {
+
+57  
+Ãw
+ 
+	`DummyXAResourû
+();
+
+61 
+x¬H–³r
+ = 
+Ãw
+ 
+	`XAResourûRecov”yH–³r
+() {
+
+62 
+public
+ 
+boŞ—n
+ 
+	`š™Ÿli£
+(
+SŒšg
+ 
+p
+è
+throws
+ 
+Exû±iÚ
+ {
+
+63  
+Œue
+;
+
+66 
+public
+ 
+XAResourû
+[] 
+	`g‘XAResourûs
+(è
+throws
+ 
+Exû±iÚ
+ {
+
+67  
+Ãw
+ 
+XAResourû
+[]{Ãw 
+	`DummyXAResourû
+()};
+
+74 @
+P»De¡roy
+
+
+75 
+´iv©e
+ 
+	$fši
+() {
+
+76 
+Sy¡em
+.
+out
+.
+	`´štf
+("unregistering RecoveryBean%n");
+
+77 
+	`uÄegi¡”
+();
+
+78 
+	}
+}
+
+80 @
+ScheduË
+(
+£cÚd
+="*/59", 
+mšu‹
+="*", 
+hour
+="*", 
+³rsi¡’t
+=
+çl£
+)
+
+81 
+public
+ () {
+
+82 
+Œy
+ {
+
+83 ià(!
+»gi¡”ed
+) {
+
+84 
+	`»gi¡”Recov”yResourûs
+(
+isWF
+);
+
+85 
+»gi¡”ed
+ = 
+Œue
+;
+
+87 } 
+	`ÿtch
+ (
+NamšgExû±iÚ
+ 
+e
+) {
+
+88 
+e
+.
+	`´štSckT¿û
+();
+
+90 
+	}
+}
+
+92 @
+Ov”ride
+
+
+93 
+public
+ 
+	$uÄegi¡”
+() {
+
+94 
+Sy¡em
+.
+out
+.
+	`´štf
+("»gi¡”„egi¡”ed=%b%n", 
+»gi¡”ed
+);
+
+95 ià(!
+»gi¡”ed
+)
+
+98 ià(
+isWF
+) {
+
+99 
+Recov”yMªag”
+ 
+mªag”
+ = Recov”yMªag”.
+	`mªag”
+(Recov”yMªag”.
+INDIRECT_MANAGEMENT
+);
+
+100 
+VeùÜ
+ 
+»cov”yModuËs
+ = 
+mªag”
+.
+	`g‘ModuËs
+();
+
+102 ià(
+»cov”yModuËs
+ !ğ
+nuÎ
+) {
+
+103 
+Enum”©iÚ
+ 
+moduËs
+ = 
+»cov”yModuËs
+.
+	`–em’ts
+();
+
+105 
+moduËs
+.
+	`hasMÜeEËm’ts
+()) {
+
+106 
+Recov”yModuË
+ 
+m
+ = (Recov”yModuËè
+moduËs
+.
+	`ÃxtEËm’t
+();
+
+108 ià(
+m
+ 
+š¡ªûof
+ 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+jts
+.
+XARecov”yModuË
+) {
+
+109 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+jts
+.
+XARecov”yModuË
+ 
+x¬m
+ = (com.¬juÇ.©s.š‹º®.j.»cov”y.jts.XARecov”yModuËè
+m
+;
+
+111 
+x¬m
+.
+	`»moveXAResourûRecov”yH–³r
+(
+x¬H–³r
+);
+
+112 } ià(
+m
+ 
+š¡ªûof
+ 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+¬juÇcÜe
+.
+XARecov”yModuË
+) {
+
+113 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+¬juÇcÜe
+.
+XARecov”yModuË
+ 
+x¬m
+ = (com.¬juÇ.©s.š‹º®.j.»cov”y.¬juÇcÜe.XARecov”yModuËè
+m
+;
+
+115 
+x¬m
+.
+	`»moveXAResourûRecov”yH–³r
+(
+x¬H–³r
+);
+
+121 
+»gi¡”ed
+ = 
+çl£
+;
+
+122 
+	}
+}
+
+124 
+´iv©e
+ 
+	$»gi¡”Recov”yResourûs
+(
+boŞ—n
+ 
+isWF
+è
+throws
+ 
+NamšgExû±iÚ
+ {
+
+125 ià(
+isWF
+) {
+
+126 
+Recov”yMªag”
+ 
+mªag”
+ = Recov”yMªag”.
+	`mªag”
+(Recov”yMªag”.
+INDIRECT_MANAGEMENT
+);
+
+127 
+VeùÜ
+ 
+»cov”yModuËs
+ = 
+mªag”
+.
+	`g‘ModuËs
+();
+
+129 ià(
+»cov”yModuËs
+ !ğ
+nuÎ
+) {
+
+130 
+Enum”©iÚ
+ 
+moduËs
+ = 
+»cov”yModuËs
+.
+	`–em’ts
+();
+
+132 
+moduËs
+.
+	`hasMÜeEËm’ts
+()) {
+
+133 
+Recov”yModuË
+ 
+m
+ = (Recov”yModuËè
+moduËs
+.
+	`ÃxtEËm’t
+();
+
+135 ià(
+m
+ 
+š¡ªûof
+ 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+jts
+.
+XARecov”yModuË
+) {
+
+136 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+jts
+.
+XARecov”yModuË
+ 
+x¬m
+ = (com.¬juÇ.©s.š‹º®.j.»cov”y.jts.XARecov”yModuËè
+m
+;
+
+138 
+x¬m
+.
+	`addS”ŸlizabËXAResourûDe£rŸliz”
+(
+de£rŸliz”
+);
+
+139 
+x¬m
+.
+	`addXAResourûRecov”yH–³r
+(
+x¬H–³r
+);
+
+140 } ià(
+m
+ 
+š¡ªûof
+ 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+¬juÇcÜe
+.
+XARecov”yModuË
+) {
+
+141 
+com
+.
+¬juÇ
+.
+©s
+.
+š‹º®
+.
+j
+.
+»cov”y
+.
+¬juÇcÜe
+.
+XARecov”yModuË
+ 
+x¬m
+ = (com.¬juÇ.©s.š‹º®.j.»cov”y.¬juÇcÜe.XARecov”yModuËè
+m
+;
+
+143 
+x¬m
+.
+	`addS”ŸlizabËXAResourûDe£rŸliz”
+(
+de£rŸliz”
+);
+
+144 
+x¬m
+.
+	`addXAResourûRecov”yH–³r
+(
+x¬H–³r
+);
+
+149 
+	`»gi¡”GFRecov”yResourûs3
+();
+
+152 
+	}
+}
+
+154 
+´iv©e
+ 
+	$»gi¡”GFRecov”yResourûs
+() {
+
+156 
+Œy
+ {
+
+157 
+CÏss
+ 
+şazz
+ = CÏss.
+	`fÜName
+("com.sun.jts.CosTransactions.RecoveryManager");
+
+158 
+M‘hod
+ 
+m‘hod
+ = 
+şazz
+.
+	`g‘M‘hod
+("»cov”XAResourûs", 
+Enum”©iÚ
+.
+şass
+);
+
+159 
+DummyXAResourû
+[] 
+x¬s
+ = {
+Ãw
+ 
+	`DummyXAResourû
+()};
+
+160 
+Enum”©iÚ
+ 
+e
+ = 
+CŞËùiÚs
+.
+	`’um”©iÚ
+(
+A¼ays
+.
+	`asLi¡
+(
+x¬s
+));
+
+162 
+m‘hod
+.
+	`švoke
+(
+nuÎ
+, 
+e
+);
+
+163 } 
+	`ÿtch
+ (
+CÏssNÙFoundExû±iÚ
+ | 
+NoSuchM‘hodExû±iÚ
+ | 
+IÎeg®AcûssExû±iÚ
+ | 
+InvoÿtiÚT¬g‘Exû±iÚ
+ 
+ex
+) {
+
+164 
+Sy¡em
+.
+out
+.
+	`´štf
+("E¼Ü„egi¡”šg„ecov”y„esourûs: %s%n", 
+ex
+.
+	`g‘Mes§ge
+());
+
+165 
+ex
+.
+	`´štSckT¿û
+();
+
+167 
+	}
+}
+
+169 
+´iv©e
+ 
+	$»gi¡”GFRecov”yResourûs2
+() {
+
+170 
+Œy
+ {
+
+171 
+T¿n§ùiÚMªag”
+ 
+tm
+ = (T¿n§ùiÚMªag”è
+Ãw
+ 
+	`In™ŸlCÚ‹xt
+().
+	`lookup
+(
+GF_TM
+);
+
+174 
+fš®
+ 
+SŒšg
+ 
+»cov”M‘hod
+ = "recover";
+
+176 
+java
+.
+Ïng
+.
+»æeù
+.
+M‘hod
+ 
+m‘hod
+ = 
+tm
+.
+	`g‘CÏss
+().
+	`g‘M‘hod
+(
+»cov”M‘hod
+, 
+XAResourû
+.
+şass
+);
+
+177 
+DummyXAResourû
+[] 
+x¬s
+ = {
+Ãw
+ 
+	`DummyXAResourû
+()};
+
+178 
+m‘hod
+.
+	`švoke
+(
+tm
+, 
+x¬s
+[0]);
+
+179 } 
+	`ÿtch
+ (
+Exû±iÚ
+ 
+e
+) {
+
+180 
+Sy¡em
+.
+out
+.
+	`´štf
+("E¼Ü„egi¡”šg„ecov”y„esourûs: %s%n", 
+e
+.
+	`g‘Mes§ge
+());
+
+181 
+e
+.
+	`´štSckT¿û
+();
+
+183 
+	}
+}
+
+194 
+´iv©e
+ 
+	$»gi¡”GFRecov”yResourûs3
+() {
+
+195 
+Œy
+ {
+
+196 
+T¿n§ùiÚMªag”
+ 
+tm
+ = (T¿n§ùiÚMªag”è
+Ãw
+ 
+	`In™ŸlCÚ‹xt
+().
+	`lookup
+(
+GF_TM
+);
+
+200 
+F›ld
+ 
+f
+ = 
+tm
+.
+	`g‘CÏss
+().
+	`g‘Deş¬edF›ld
+("transactionManager");
+
+201 
+f
+.
+	`£tAcûssibË
+(
+Œue
+);
+
+202 
+Objeù
+ 
+aùu®TM
+ = 
+f
+.
+	`g‘
+(
+tm
+);
+
+204 
+fš®
+ 
+SŒšg
+ 
+»cov”M‘hod
+ = "recover";
+
+206 
+java
+.
+Ïng
+.
+»æeù
+.
+M‘hod
+ 
+m‘hod
+ = 
+aùu®TM
+.
+	`g‘CÏss
+().
+	`g‘M‘hod
+(
+
+207 
+»cov”M‘hod
+, 
+Ãw
+ 
+CÏss
+[] { 
+XAResourû
+[].
+şass
+} );
+
+208 
+XAResourû
+[] 
+x¬s
+ = 
+Ãw
+ XAResource[1];
+
+209 
+x¬s
+[0] = 
+Ãw
+ 
+	`DummyXAResourû
+();
+
+210 
+m‘hod
+.
+	`švoke
+(
+aùu®TM
+, 
+Ãw
+ 
+Objeù
+[] { 
+x¬s
+ });
+
+211 } 
+	`ÿtch
+ (
+Exû±iÚ
+ 
+e
+) {
+
+212 
+Sy¡em
+.
+out
+.
+	`´štf
+("E¼Ü„egi¡”šg„ecov”y„esourûs: %s%n", 
+e
+.
+	`g‘Mes§ge
+());
+
+213 
+e
+.
+	`´štSckT¿û
+();
+
+215 
+	}
+}
+
+	@recovery/src/main/java/org/jboss/narayana/RecoveryRegistration.java
+
+1 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+3 
+impÜt
+ 
+	gjavax
+.
+	gejb
+.
+	gRemÙe
+;
+
+6 
+public
+ 
+š‹rçû
+ 
+	gRecov”yRegi¡¿tiÚ
+ {
+
+8 
+uÄegi¡”
+();
+
+	@resource/src/main/java/org/jboss/narayana/ASFailureMode.java
+
+21 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+23 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gS”ŸlizabË
+;
+
+28 
+public
+ 
+ASFau»Mode
+ 
+im¶em’ts
+ 
+	gS”ŸlizabË
+
+
+30 
+NONE
+(
+çl£
+)
+
+32 ,
+HALT
+(
+Œue
+)
+
+33 ,
+EXIT
+(
+Œue
+)
+
+34 ,
+SUSPEND
+(
+çl£
+)
+
+35 ,
+XAEXCEPTION
+(
+çl£
+)
+
+38 
+´iv©e
+ 
+boŞ—n
+ 
+	gwlT”mš©eVM
+;
+
+40 
+ASFau»Mode
+(
+boŞ—n
+ 
+wlT”mš©eVM
+)
+
+42 
+	gthis
+.
+	gwlT”mš©eVM
+ = 
+wlT”mš©eVM
+;
+
+45 
+public
+ 
+boŞ—n
+ 
+wlT”mš©eVM
+()
+
+47  
+	gwlT”mš©eVM
+;
+
+50 
+public
+ 
+ASFau»Mode
+ 
+toEnum
+(
+SŒšg
+ 
+mode
+)
+
+52  
+	gASFau»Mode
+.
+v®ueOf
+(
+mode
+.
+toUµ”Ca£
+());
+
+	@resource/src/main/java/org/jboss/narayana/ASFailureSpec.java
+
+21 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+23 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gS”ŸlizabË
+;
+
+35 
+public
+ cÏs 
+	cASFau»S³c
+ 
+im¶em’ts
+ 
+	mS”ŸlizabË
+
+
+37 
+´iv©e
+ 
+SŒšg
+ 
+	mÇme
+;
+
+38 
+´iv©e
+ 
+ASFau»Mode
+ 
+	mmode
+;
+
+39 
+´iv©e
+ 
+SŒšg
+ 
+	mmodeArg
+;
+
+40 
+´iv©e
+ 
+ASFau»Ty³
+ 
+	mty³
+;
+
+42 
+public
+ 
+	$ASFau»S³c
+()
+
+44 
+mode
+ = 
+ASFau»Mode
+.
+NONE
+;
+
+45 
+ty³
+ = 
+ASFau»Ty³
+.
+NONE
+;
+
+48 
+public
+ 
+	$ASFau»S³c
+(
+SŒšg
+ 
+Çme
+, 
+ASFau»Mode
+ 
+mode
+, SŒšg 
+modeArg
+, 
+ASFau»Ty³
+ 
+ty³
+)
+
+50 
+this
+.
+Çme
+ =‚ame;
+
+51 
+this
+.
+mode
+ = mode;
+
+52 
+this
+.
+modeArg
+ = modeArg;
+
+53 
+this
+.
+ty³
+ =ype;
+
+54 
+	}
+}
+
+56 
+public
+ 
+boŞ—n
+ 
+	$wlT”mš©eVM
+()
+
+58  
+mode
+.
+	`wlT”mš©eVM
+();
+
+59 
+	}
+}
+
+61 
+public
+ 
+ASFau»Mode
+ 
+	$g‘Mode
+()
+
+63  
+mode
+;
+
+64 
+	}
+}
+
+66 
+public
+ 
+ASFau»Ty³
+ 
+	$g‘Ty³
+()
+
+68  
+ty³
+;
+
+69 
+	}
+}
+
+71 
+public
+ 
+SŒšg
+ 
+	$g‘Name
+()
+
+73  
+Çme
+;
+
+74 
+	}
+}
+
+76 
+public
+ 
+	$£tName
+(
+SŒšg
+ 
+Çme
+)
+
+78 
+this
+.
+Çme
+ =‚ame;
+
+79 
+	}
+}
+
+81 
+public
+ 
+	$£tMode
+(
+SŒšg
+ 
+mode
+)
+
+83 
+this
+.
+mode
+ = 
+ASFau»Mode
+.
+	`v®ueOf
+(mode);
+
+84 
+	}
+}
+
+86 
+public
+ 
+SŒšg
+ 
+	$g‘ModeArg
+() {
+
+87  
+modeArg
+;
+
+88 
+	}
+}
+
+90 
+public
+ 
+	$£tModeArg
+(
+SŒšg
+ 
+modeArg
+) {
+
+91 
+this
+.
+modeArg
+ = modeArg;
+
+92 
+	}
+}
+
+94 
+public
+ 
+	$£tTy³
+(
+SŒšg
+ 
+ty³
+)
+
+96 
+this
+.
+ty³
+ = 
+ASFau»Ty³
+.
+	`v®ueOf
+(type);
+
+97 
+	}
+}
+
+99 
+public
+ 
+SŒšg
+ 
+	$toSŒšg
+()
+
+101  
+Ãw
+ 
+	`SŒšgBud”
+().
+	`­³nd
+(
+mode
+).­³nd(',').­³nd(
+ty³
+).
+	`toSŒšg
+();
+
+102 
+	}
+}
+
+104 
+public
+ 
+boŞ—n
+ 
+	$equ®s
+(
+Objeù
+ 
+o
+)
+
+106 ià(
+this
+ =ğ
+o
+è 
+Œue
+;
+
+107 ià(!(
+o
+ 
+š¡ªûof
+ 
+ASFau»S³c
+)è 
+çl£
+;
+
+109 
+ASFau»S³c
+ 
+th©
+ = (ASFau»S³cè
+o
+;
+
+111 ià(
+Çme
+ !ğ
+nuÎ
+ ? !Çme.
+	`equ®s
+(
+th©
+.Çmeè:h©.Çm!ğnuÎè 
+çl£
+;
+
+113  
+Œue
+;
+
+114 
+	}
+}
+
+116 
+public
+ 
+	$hashCode
+()
+
+118  (
+Çme
+ !ğ
+nuÎ
+ ?‚ame.
+	`hashCode
+() : 0);
+
+119 
+	}
+}
+
+	@resource/src/main/java/org/jboss/narayana/ASFailureType.java
+
+21 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+23 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gS”ŸlizabË
+;
+
+28 
+public
+ 
+ASFau»Ty³
+ 
+im¶em’ts
+ 
+	gS”ŸlizabË
+
+
+30 
+	gNONE
+
+
+32 ,
+	gPRE_PREPARE
+
+
+34 ,
+	gXARES_START
+
+
+35 ,
+	gXARES_END
+
+
+36 ,
+	gXARES_PREPARE
+
+
+37 ,
+	gXARES_ROLLBACK
+
+
+38 ,
+	gXARES_COMMIT
+
+
+39 ,
+	gXARES_RECOVER
+
+
+40 ,
+	gXARES_FORGET
+
+
+42 ,
+	gSYNCH_BEFORE
+
+
+43 ,
+	gSYNCH_AFTER
+
+
+46 
+public
+ 
+ASFau»Ty³
+ 
+toEnum
+(
+SŒšg
+ 
+ty³
+)
+
+48  
+	gASFau»Ty³
+.
+v®ueOf
+(
+ty³
+.
+toUµ”Ca£
+());
+
+51 
+public
+ 
+boŞ—n
+ 
+isXA
+()
+
+53  
+Çme
+().
+¡¬tsW™h
+("XARES");
+
+56 
+public
+ 
+boŞ—n
+ 
+isSynchrÚiz©iÚ
+()
+
+58  
+Çme
+().
+¡¬tsW™h
+("SYNCH");
+
+61 
+public
+ 
+boŞ—n
+ 
+isP»Comm™
+()
+
+63  
+equ®s
+(
+PRE_PREPARE
+);
+
+	@resource/src/main/java/org/jboss/narayana/DummyXAResource.java
+
+22 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+24 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gxa
+.
+	gXAExû±iÚ
+;
+
+25 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gxa
+.
+	gXAResourû
+;
+
+26 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gxa
+.
+	gXid
+;
+
+27 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gBy‹A¼ayOuutSŒ—m
+;
+
+29 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gPrštWr™”
+;
+
+30 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gS”ŸlizabË
+;
+
+32 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gA¼ayLi¡
+;
+
+33 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gA¼ays
+;
+
+34 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gHashM­
+;
+
+35 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gLi¡
+;
+
+36 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gM­
+;
+
+41 
+public
+ 
+şass
+ 
+DummyXAResourû
+ 
+im¶em’ts
+ 
+	gXAResourû
+, 
+	gS”ŸlizabË
+
+
+43 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	gXID_FNAME
+ = "xids.txt";
+
+44 
+´iv©e
+ 
+fš®
+ 
+SŒšg
+ 
+	gXAR_LOG_FNAME
+ = "xar.log";
+
+45 
+´iv©e
+ 
+fš®
+ 
+	gM­
+<
+	gSŒšg
+, 
+	gXAExû±iÚ
+> 
+	gxaCodeM­
+ = 
+Ãw
+ 
+HashM­
+<
+SŒšg
+, XAException>();
+
+46 
+´iv©e
+ 
+XidStÜe
+ 
+	gxidStÜe
+ = 
+Ãw
+ XidStÜe(
+XID_FNAME
+);
+
+47 
+´iv©e
+ 
+XidStÜe
+ 
+	gŒaûLog
+ = 
+Ãw
+ XidStÜe(
+XAR_LOG_FNAME
+);
+
+49 
+´iv©e
+ 
+ASFau»Ty³
+ 
+	g_xaFau»Ty³
+ = ASFau»Ty³.
+NONE
+;
+
+50 
+´iv©e
+ 
+ASFau»Mode
+ 
+	g_xaFau»Mode
+ = ASFau»Mode.
+NONE
+;
+
+51 
+´iv©e
+ 
+	g_su¥’d
+;
+
+52 
+´iv©e
+ 
+XAExû±iÚ
+ 
+	g_xaExû±iÚ
+;
+
+53 
+´iv©e
+ 
+	gtxTimeout
+ = 10;
+
+54 
+´iv©e
+ 
+Œªs›Á
+ 
+boŞ—n
+ 
+	g_isP»·»d
+ = 
+çl£
+;
+
+55 
+´iv©e
+ 
+SŒšg
+ 
+	g_xid
+ = 
+nuÎ
+;
+
+59 
+š™
+();
+
+62 
+public
+ 
+DummyXAResourû
+()
+
+64 
+this
+(
+Ãw
+ 
+ASFau»S³c
+("deçuÉ", 
+ASFau»Mode
+.
+NONE
+, "", 
+ASFau»Ty³
+.NONE));
+
+67 
+public
+ 
+DummyXAResourû
+(
+ASFau»S³c
+ 
+¥ec
+)
+
+69 ià(
+	g¥ec
+ =ğ
+nuÎ
+)
+
+70 
+throw
+ 
+Ãw
+ 
+IÎeg®Argum’tExû±iÚ
+("Invalid XA„esource failure injection specification");
+
+72 
+£tFau»Mode
+(
+¥ec
+.
+g‘Mode
+(), s³c.
+g‘ModeArg
+());
+
+73 
+£tFau»Ty³
+(
+¥ec
+.
+g‘Ty³
+());
+
+78 
+public
+ 
+­¶yS³c
+(
+Xid
+ 
+xid
+, 
+SŒšg
+ 
+mes§ge
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+80 
+­¶yS³c
+(
+xid
+, 
+mes§ge
+, 
+_isP»·»d
+);
+
+83 
+public
+ 
+­¶yS³c
+(
+Xid
+ 
+xid
+, 
+SŒšg
+ 
+mes§ge
+, 
+boŞ—n
+ 
+´•¬ed
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+85 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+NONE
+è|| 
+	g_xaFau»Mode
+.equ®s(
+ASFau»Mode
+.NONEè|| !
+	g´•¬ed
+)
+
+87 
+debug
+(
+xid
+, 
+mes§ge
+ + (
+_isP»·»d
+ ? " ... " : "„ecovery"));
+
+91 
+debug
+(
+xid
+, "Applying fault injection with‡ctive branches");
+
+92 ià(
+	g_xaExû±iÚ
+ !ğ
+nuÎ
+)
+
+94 
+debug
+(
+xid
+, 
+mes§ge
+ + " ... x¨”rÜ: " + 
+_xaExû±iÚ
+.
+g‘Mes§ge
+());
+
+95 
+throw
+ 
+	g_xaExû±iÚ
+;
+
+97 ià(
+	g_xaFau»Mode
+.
+equ®s
+(
+ASFau»Mode
+.
+HALT
+))
+
+99 
+debug
+(
+xid
+, 
+mes§ge
+ + " ... halting");
+
+100 
+	gRuÁime
+.
+g‘RuÁime
+().
+h®t
+(1);
+
+102 ià(
+	g_xaFau»Mode
+.
+equ®s
+(
+ASFau»Mode
+.
+EXIT
+))
+
+104 
+debug
+(
+xid
+, 
+mes§ge
+ + " ...ƒxiting");
+
+105 
+	gSy¡em
+.
+ex™
+(1);
+
+107 ià(
+	g_xaFau»Mode
+.
+equ®s
+(
+ASFau»Mode
+.
+SUSPEND
+))
+
+109 
+debug
+(
+xid
+, 
+mes§ge
+ + " ... su¥’dšg fÜ " + 
+_su¥’d
+);
+
+110 
+su¥’d
+(
+_su¥’d
+);
+
+111 
+debug
+(
+xid
+, 
+mes§ge
+ + " ...„esuming");
+
+115 
+public
+ 
+SŒšg
+ 
+toSŒšg
+()
+
+119 
+SŒšgBud”
+ 
+	gsb
+ = 
+Ãw
+ StringBuilder();
+
+121 
+	gsb
+.
+­³nd
+("XAResourûW¿µ”Im¶@").­³nd(
+IÁeg”
+.
+toHexSŒšg
+(
+Sy¡em
+.
+id’t™yHashCode
+(
+this
+)));
+
+122 
+	gsb
+.
+­³nd
+("…ad=").append("false");
+
+123 
+	gsb
+.
+­³nd
+(" overrideRmValue=").append("false");
+
+124 
+	gsb
+.
+­³nd
+("…roductName=").append("Dummy Product");
+
+125 
+	gsb
+.
+­³nd
+("…roductVersion=").append("0.0.0");
+
+126 
+	gsb
+.
+­³nd
+(" jndiName=").append("java:/dummyProd");
+
+127 
+	gsb
+.
+­³nd
+("]");
+
+129  
+	gsb
+.
+toSŒšg
+();
+
+132 
+´iv©e
+ 
+su¥’d
+(
+m£cs
+)
+
+134 
+	gŒy
+
+
+136 
+	gTh»ad
+.
+¦“p
+(
+m£cs
+);
+
+138 
+ÿtch
+ (
+IÁ”ru±edExû±iÚ
+ 
+e
+)
+
+140 
+	ge
+.
+´štSckT¿û
+();
+
+144 
+public
+ 
+£tFau»Mode
+(
+ASFau»Mode
+ 
+mode
+, 
+SŒšg
+ ... 
+¬gs
+è
+throws
+ 
+	gIÎeg®Argum’tExû±iÚ
+
+
+146 
+	g_xaFau»Mode
+ = 
+mode
+;
+
+148 ià(
+	g¬gs
+ !ğ
+nuÎ
+ && 
+¬gs
+.
+Ëngth
+ != 0)
+
+150 ià(
+_xaFau»Mode
+.
+equ®s
+(
+ASFau»Mode
+.
+SUSPEND
+))
+
+152 
+_su¥’d
+ = 
+IÁeg”
+.
+·r£IÁ
+(
+¬gs
+[0]);
+
+154 ià(
+	g_xaFau»Mode
+.
+equ®s
+(
+ASFau»Mode
+.
+XAEXCEPTION
+))
+
+156 
+	g_xaExû±iÚ
+ = 
+xaCodeM­
+.
+g‘
+(
+¬gs
+[0]);
+
+158 ià(
+	g_xaExû±iÚ
+ =ğ
+nuÎ
+)
+
+159 
+_xaExû±iÚ
+ = 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_RMFAIL
+);
+
+164 
+public
+ 
+£tFau»Ty³
+(
+ASFau»Ty³
+ 
+ty³
+)
+
+166 
+	g_xaFau»Ty³
+ = 
+ty³
+;
+
+169 
+public
+ 
+ASFau»Ty³
+ 
+g‘Fau»Ty³
+()
+
+171  
+	g_xaFau»Ty³
+;
+
+176 
+public
+ 
+befÜeCom¶‘iÚ
+()
+
+178 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+SYNCH_BEFORE
+))
+
+179 
+	gŒy
+
+
+181 
+­¶yS³c
+(
+nuÎ
+, "Before completion");
+
+183 
+ÿtch
+ (
+XAExû±iÚ
+ 
+e
+)
+
+185 
+throw
+ 
+Ãw
+ 
+RuÁimeExû±iÚ
+(
+e
+);
+
+189 
+public
+ 
+aá”Com¶‘iÚ
+(
+i
+)
+
+192 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+SYNCH_AFTER
+))
+
+193 
+	gŒy
+
+
+195 
+­¶yS³c
+(
+nuÎ
+, "After completion");
+
+197 
+ÿtch
+ (
+XAExû±iÚ
+ 
+e
+)
+
+199 
+throw
+ 
+Ãw
+ 
+RuÁimeExû±iÚ
+(
+e
+);
+
+203 
+´iv©e
+ 
+debug
+(
+Xid
+ 
+xid
+, 
+SŒšg
+ 
+mes§ge
+) {
+
+204 
+debug
+(
+xid
+, 
+çl£
+, 
+mes§ge
+);
+
+207 
+´iv©e
+ 
+debug
+(
+Xid
+ 
+xid
+, 
+boŞ—n
+ 
+¡ackT¿û
+, 
+SŒšg
+ 
+mes§ge
+) {
+
+208 
+SŒšg
+ 
+	gxidSŒ
+ = 
+xid
+ !ğ
+nuÎ
+ ? 
+Ãw
+ 
+XidIm¶
+(xid).
+fÜm©SŒšg
+() : "";
+
+209 
+	gSy¡em
+.
+	gout
+.
+´štf
+("DummyXAResourû: %s%n", 
+mes§ge
+);
+
+211 ià(
+	g¡ackT¿û
+)
+
+212 
+	gSy¡em
+.
+	gout
+.
+´šn
+(
+g‘SckT¿û
+(
+nuÎ
+));
+
+214 
+	gŒy
+ {
+
+215 
+	gŒaûLog
+.
+wr™e
+(
+s
+ -> s, 
+SŒšg
+.
+fÜm©
+(": [%s] % %s", 
+Th»ad
+.
+cu¼’tTh»ad
+().
+g‘Name
+(), 
+xidSŒ
+, 
+mes§ge
+));
+
+216 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+ignÜe
+) {
+
+222 
+public
+ 
+comm™
+(
+Xid
+ 
+xid
+, 
+boŞ—n
+ 
+b
+è
+throws
+ 
+	gXAExû±iÚ
+ {
+
+223 
+debug
+(
+xid
+, "commit");
+
+225 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+XARES_COMMIT
+))
+
+226 
+­¶yS³c
+(
+xid
+, "xa commit");
+
+228 
+	g_isP»·»d
+ = 
+çl£
+;
+
+230 
+	gŒy
+ {
+
+231 
+	gxidStÜe
+.
+»move
+(
+xid
+);
+
+232 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+ignÜe
+) {
+
+240 
+public
+ 
+rŞlback
+(
+Xid
+ 
+xid
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+242 
+debug
+(
+xid
+, 
+Œue
+, "rollback");
+
+244 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+XARES_ROLLBACK
+))
+
+245 
+­¶yS³c
+(
+xid
+, "xa„ollback");
+
+247 
+	g_isP»·»d
+ = 
+çl£
+;
+
+248 
+	gŒy
+ {
+
+249 
+	gxidStÜe
+.
+»move
+(
+xid
+);
+
+250 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+ignÜe
+) {
+
+255 
+public
+ 
+’d
+(
+Xid
+ 
+xid
+, 
+i
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+257 
+debug
+(
+xid
+, "end");
+
+259 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+XARES_END
+))
+
+260 
+­¶yS³c
+(
+xid
+, "xaƒnd");
+
+263 
+public
+ 
+fÜg‘
+(
+Xid
+ 
+xid
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+265 
+debug
+(
+xid
+, "forget");
+
+267 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+XARES_FORGET
+))
+
+268 
+­¶yS³c
+(
+xid
+, "xa forget");
+
+270 
+	g_isP»·»d
+ = 
+çl£
+;
+
+272 
+	gŒy
+ {
+
+273 
+	gxidStÜe
+.
+»move
+(
+xid
+);
+
+274 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+ignÜe
+) {
+
+279 
+public
+ 
+g‘T¿n§ùiÚTimeout
+(è
+throws
+ 
+	gXAExû±iÚ
+
+
+281  
+	gtxTimeout
+;
+
+284 
+public
+ 
+boŞ—n
+ 
+isSameRM
+(
+XAResourû
+ 
+xaResourû
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+286  
+xaResourû
+ 
+š¡ªûof
+ 
+	gDummyXAResourû
+;
+
+289 
+public
+ 
+´•¬e
+(
+Xid
+ 
+xid
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+291 
+debug
+(
+xid
+, "prepare");
+
+293 
+	g_isP»·»d
+ = 
+Œue
+;
+
+295 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+XARES_PREPARE
+))
+
+296 
+­¶yS³c
+(
+xid
+, "xa…repare");
+
+298 
+	gŒy
+ {
+
+299 
+	gxidStÜe
+.
+wr™e
+(
+xid
+);
+
+300 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+ignÜe
+) {
+
+304  
+	gXA_OK
+;
+
+307 
+public
+ 
+	gXid
+[] 
+»cov”
+(
+i
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+309 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+XARES_RECOVER
+))
+
+310 
+­¶yS³c
+(
+nuÎ
+, "xa„ecover");
+
+312 
+	gŒy
+ {
+
+313 
+	gLi¡
+<
+	gXid
+> 
+	gxids
+ = 
+xidStÜe
+.
+»ad
+(
+Ãw
+ 
+A¼ayLi¡
+<>());
+
+316  
+	gxids
+.
+toA¼ay
+(
+Ãw
+ 
+Xid
+[
+xids
+.
+size
+()]);
+
+317 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+ignÜe
+) {
+
+319  
+Ãw
+ 
+	gXid
+[0];
+
+323 
+public
+ 
+boŞ—n
+ 
+£tT¿n§ùiÚTimeout
+(
+txTimeout
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+325 
+	gthis
+.
+	gtxTimeout
+ = 
+txTimeout
+;
+
+327  
+	gŒue
+;
+
+330 
+public
+ 
+¡¬t
+(
+Xid
+ 
+xid
+, 
+i
+è
+throws
+ 
+	gXAExû±iÚ
+
+
+332 
+debug
+(
+xid
+, "start");
+
+334 ià(
+	g_xaFau»Ty³
+.
+equ®s
+(
+ASFau»Ty³
+.
+XARES_START
+))
+
+335 
+­¶yS³c
+(
+xid
+, "xa start");
+
+338 
+public
+ 
+SŒšg
+ 
+g‘EISProduùName
+() {  "Test XAResouce";}
+
+340 
+public
+ 
+SŒšg
+ 
+g‘EISProduùV”siÚ
+() {  "v666.0";}
+
+342 
+´iv©e
+ 
+SŒšg
+ 
+g‘SckT¿û
+(
+Exû±iÚ
+ 
+e
+) {
+
+343 
+By‹A¼ayOuutSŒ—m
+ 
+	gby‹s
+ = 
+Ãw
+ ByteArrayOutputStream();
+
+344 
+PrštWr™”
+ 
+	gwr™”
+ = 
+Ãw
+ PrštWr™”(
+by‹s
+, 
+Œue
+);
+
+346 ià(
+	ge
+ =ğ
+nuÎ
+) {
+
+347 
+A¼ays
+.
+¡»am
+(
+Th»ad
+.
+cu¼’tTh»ad
+().
+g‘SckT¿û
+()).
+fÜEach
+(
+wr™”
+::
+´šn
+);
+
+349 
+ThrowabË
+ 
+	gÿu£
+ = 
+e
+.
+g‘Cau£
+();
+
+351 
+	ge
+.
+´štSckT¿û
+(
+wr™”
+);
+
+353 
+	gÿu£
+ !ğ
+nuÎ
+) {
+
+354 
+wr™”
+.
+wr™e
+("Caused By:");
+
+355 
+	gwr™”
+.
+´šn
+();
+
+356 
+	gÿu£
+.
+´štSckT¿û
+(
+wr™”
+);
+
+357 
+	gÿu£
+ = 
+ÿu£
+.
+g‘Cau£
+();
+
+361  
+	gby‹s
+.
+toSŒšg
+();
+
+364 @
+Suµ»ssW¬nšgs
+({"ThrowableInstanceNeverThrown"})
+
+365 
+´iv©e
+ 
+š™
+()
+
+367 
+	gxaCodeM­
+.
+put
+("XA_HEURCOM", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_HEURCOM
+));
+
+368 
+	gxaCodeM­
+.
+put
+("XA_HEURHAZ", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_HEURHAZ
+));
+
+369 
+	gxaCodeM­
+.
+put
+("XA_HEURMIX", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_HEURMIX
+));
+
+370 
+	gxaCodeM­
+.
+put
+("XA_HEURRB", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_HEURRB
+));
+
+371 
+	gxaCodeM­
+.
+put
+("XA_NOMIGRATE", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_NOMIGRATE
+));
+
+372 
+	gxaCodeM­
+.
+put
+("XA_RBBASE", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBBASE
+));
+
+373 
+	gxaCodeM­
+.
+put
+("XA_RBCOMMFAIL", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBCOMMFAIL
+));
+
+374 
+	gxaCodeM­
+.
+put
+("XA_RBDEADLOCK", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBDEADLOCK
+));
+
+375 
+	gxaCodeM­
+.
+put
+("XA_RBEND", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBEND
+));
+
+376 
+	gxaCodeM­
+.
+put
+("XA_RBINTEGRITY", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBINTEGRITY
+));
+
+377 
+	gxaCodeM­
+.
+put
+("XA_RBOTHER", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBOTHER
+));
+
+378 
+	gxaCodeM­
+.
+put
+("XA_RBPROTO", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBPROTO
+));
+
+379 
+	gxaCodeM­
+.
+put
+("XA_RBROLLBACK", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBROLLBACK
+));
+
+380 
+	gxaCodeM­
+.
+put
+("XA_RBTIMEOUT", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBTIMEOUT
+));
+
+381 
+	gxaCodeM­
+.
+put
+("XA_RBTRANSIENT", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RBTRANSIENT
+));
+
+382 
+	gxaCodeM­
+.
+put
+("XA_RDONLY", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RDONLY
+));
+
+383 
+	gxaCodeM­
+.
+put
+("XA_RETRY", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XA_RETRY
+));
+
+384 
+	gxaCodeM­
+.
+put
+("XAER_ASYNC", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_ASYNC
+));
+
+385 
+	gxaCodeM­
+.
+put
+("XAER_DUPID", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_DUPID
+));
+
+386 
+	gxaCodeM­
+.
+put
+("XAER_INVAL", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_INVAL
+));
+
+387 
+	gxaCodeM­
+.
+put
+("XAER_NOTA", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_NOTA
+));
+
+388 
+	gxaCodeM­
+.
+put
+("XAER_OUTSIDE", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_OUTSIDE
+));
+
+389 
+	gxaCodeM­
+.
+put
+("XAER_PROTO", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_PROTO
+));
+
+390 
+	gxaCodeM­
+.
+put
+("XAER_RMERR", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_RMERR
+));
+
+391 
+	gxaCodeM­
+.
+put
+("XAER_RMFAIL ", 
+Ãw
+ 
+XAExû±iÚ
+(XAExû±iÚ.
+XAER_RMFAIL
+));
+
+394 
+public
+ 
+boŞ—n
+ 
+isXAResourû
+()
+
+396  
+	g_xaFau»Ty³
+.
+isXA
+(è|| _xaFau»Ty³.
+equ®s
+(
+ASFau»Ty³
+.
+NONE
+);
+
+399 
+public
+ 
+boŞ—n
+ 
+isSynchrÚiz©iÚ
+()
+
+401  
+	g_xaFau»Ty³
+.
+isSynchrÚiz©iÚ
+();
+
+404 
+public
+ 
+boŞ—n
+ 
+isP»Comm™
+()
+
+406  
+	g_xaFau»Ty³
+.
+isP»Comm™
+();
+
+409 
+public
+ 
+boŞ—n
+ 
+ex³ùExû±iÚ
+()
+
+411  
+	g_xaFau»Mode
+.
+equ®s
+(
+ASFau»Mode
+.
+XAEXCEPTION
+);
+
+	@resource/src/main/java/org/jboss/narayana/XidImpl.java
+
+1 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+3 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gxa
+.
+	gXid
+;
+
+4 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gBy‹A¼ayIÅutSŒ—m
+;
+
+5 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gBy‹A¼ayOuutSŒ—m
+;
+
+6 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gIOExû±iÚ
+;
+
+7 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gObjeùIÅutSŒ—m
+;
+
+8 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gObjeùOuutSŒ—m
+;
+
+9 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gS”ŸlizabË
+;
+
+10 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gA¼ays
+;
+
+11 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gBa£64
+;
+
+13 
+public
+ 
+şass
+ 
+XidIm¶
+ 
+im¶em’ts
+ 
+	gXid
+, 
+	gS”ŸlizabË
+ {
+
+14 
+´iv©e
+ 
+	gfÜm©Id
+;
+
+15 
+	gby‹
+[] 
+	gglob®T¿n§ùiÚId
+;
+
+16 
+	gby‹
+[] 
+	gb¿nchQu®if›r
+;
+
+18 
+public
+ 
+XidIm¶
+(
+Xid
+ 
+xid
+) {
+
+19 
+	gfÜm©Id
+ = 
+xid
+.
+g‘FÜm©Id
+();
+
+20 
+	gglob®T¿n§ùiÚId
+ = 
+xid
+.
+g‘Glob®T¿n§ùiÚId
+();
+
+21 
+	gb¿nchQu®if›r
+ = 
+xid
+.
+g‘B¿nchQu®if›r
+();
+
+24 
+public
+ 
+XidIm¶
+(
+SŒšg
+ 
+xid
+) {
+
+25 
+	gŒy
+ {
+
+26 
+XidIm¶
+ 
+	go
+ = (XidIm¶èXidIm¶.
+äomSŒšg
+(
+xid
+);
+
+28 
+	gfÜm©Id
+ = 
+o
+.
+g‘FÜm©Id
+();
+
+29 
+	gglob®T¿n§ùiÚId
+ = 
+o
+.
+g‘Glob®T¿n§ùiÚId
+();
+
+30 
+	gb¿nchQu®if›r
+ = 
+o
+.
+g‘B¿nchQu®if›r
+();
+
+31 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+e
+) {
+
+32 
+	gSy¡em
+.
+	gout
+.
+´štf
+("XidIm¶: de£rŸliz”rÜ %s%n", 
+e
+.
+g‘Mes§ge
+());
+
+33 
+throw
+ 
+Ãw
+ 
+RuÁimeExû±iÚ
+(
+e
+);
+
+37 @
+Ov”ride
+
+
+38 
+public
+ 
+boŞ—n
+ 
+equ®s
+(
+Objeù
+ 
+o
+) {
+
+39 ià(
+	gthis
+ =ğ
+o
+è 
+Œue
+;
+
+40 ià(!(
+o
+ 
+š¡ªûof
+ 
+	gXidIm¶
+)è 
+	gçl£
+;
+
+42 
+XidIm¶
+ 
+	gxid
+ = (XidIm¶è
+o
+;
+
+44 ià(
+	gfÜm©Id
+ !ğ
+xid
+.
+fÜm©Id
+è 
+çl£
+;
+
+45 ià(!
+	gA¼ays
+.
+equ®s
+(
+b¿nchQu®if›r
+, 
+xid
+.b¿nchQu®if›r)è 
+	gçl£
+;
+
+46 ià(!
+	gA¼ays
+.
+equ®s
+(
+glob®T¿n§ùiÚId
+, 
+xid
+.glob®T¿n§ùiÚId)è 
+	gçl£
+;
+
+48  
+	gŒue
+;
+
+51 @
+Ov”ride
+
+
+52 
+public
+ 
+hashCode
+() {
+
+53 
+	g»suÉ
+ = 
+fÜm©Id
+;
+
+54 
+	g»suÉ
+ = 31 * 
+»suÉ
+ + 
+A¼ays
+.
+hashCode
+(
+glob®T¿n§ùiÚId
+);
+
+55 
+	g»suÉ
+ = 31 * 
+»suÉ
+ + 
+A¼ays
+.
+hashCode
+(
+b¿nchQu®if›r
+);
+
+56  
+	g»suÉ
+;
+
+59 @
+Ov”ride
+
+
+60 
+public
+ 
+g‘FÜm©Id
+() {
+
+61  
+	gfÜm©Id
+;
+
+64 @
+Ov”ride
+
+
+65 
+public
+ 
+	gby‹
+[] 
+g‘Glob®T¿n§ùiÚId
+() {
+
+66  
+	gglob®T¿n§ùiÚId
+;
+
+69 @
+Ov”ride
+
+
+70 
+public
+ 
+	gby‹
+[] 
+g‘B¿nchQu®if›r
+() {
+
+71  
+	gb¿nchQu®if›r
+;
+
+77 @
+Ov”ride
+
+
+78 
+public
+ 
+SŒšg
+ 
+toSŒšg
+() {
+
+79 
+	gŒy
+ {
+
+80  
+	gXidIm¶
+.
+toSŒšg
+(
+this
+);
+
+81 } 
+ÿtch
+ (
+IOExû±iÚ
+ 
+e
+) {
+
+82  
+fÜm©SŒšg
+();
+
+86 
+public
+ 
+SŒšg
+ 
+fÜm©SŒšg
+() {
+
+88 "fÜm©Id=" + 
+	gfÜm©Id
+ +
+
+89 ", glob®T¿n§ùiÚId=" + 
+	gA¼ays
+.
+toSŒšg
+(
+glob®T¿n§ùiÚId
+) +
+
+90 ", b¿nchQu®if›r=" + 
+	gA¼ays
+.
+toSŒšg
+(
+b¿nchQu®if›r
+) +
+
+95 
+public
+ 
+Objeù
+ 
+äomSŒšg
+Ğ
+SŒšg
+ 
+s
+ ) 
+throws
+ 
+	gIOExû±iÚ
+, 
+	gCÏssNÙFoundExû±iÚ
+ {
+
+96 
+	gby‹
+[] 
+	gd©a
+ = 
+Ba£64
+.
+g‘Decod”
+().
+decode
+Ğ
+s
+ );
+
+97 
+ObjeùIÅutSŒ—m
+ 
+	gois
+ = 
+Ãw
+ ObjeùIÅutSŒ—mÒew 
+By‹A¼ayIÅutSŒ—m
+Ğ
+d©a
+ ) );
+
+98 
+Objeù
+ 
+	go
+ = 
+ois
+.
+»adObjeù
+();
+
+99 
+	gois
+.
+şo£
+();
+
+101  
+	go
+;
+
+105 
+public
+ 
+SŒšg
+ 
+toSŒšg
+Ğ
+S”ŸlizabË
+ 
+o
+ ) 
+throws
+ 
+	gIOExû±iÚ
+ {
+
+106 
+By‹A¼ayOuutSŒ—m
+ 
+	gbaos
+ = 
+Ãw
+ ByteArrayOutputStream();
+
+107 
+ObjeùOuutSŒ—m
+ 
+	goos
+ = 
+Ãw
+ ObjeùOuutSŒ—mĞ
+baos
+ );
+
+108 
+	goos
+.
+wr™eObjeù
+Ğ
+o
+ );
+
+109 
+	goos
+.
+şo£
+();
+
+110  
+	gBa£64
+.
+g‘Encod”
+().
+’codeToSŒšg
+(
+baos
+.
+toBy‹A¼ay
+());
+
+	@resource/src/main/java/org/jboss/narayana/XidStore.java
+
+1 
+·ckage
+ 
+	gÜg
+.
+	gjboss
+.
+	gÇ¿yªa
+;
+
+3 
+impÜt
+ 
+	gjavax
+.
+	gŒª§ùiÚ
+.
+	gxa
+.
+	gXid
+;
+
+4 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gFeIÅutSŒ—m
+;
+
+5 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gFeOuutSŒ—m
+;
+
+6 
+impÜt
+ 
+	gjava
+.
+	gnio
+.
+	gchªÃls
+.
+	gFeLock
+;
+
+7 
+impÜt
+ 
+	gjava
+.
+	gnio
+.
+	gch¬£t
+.
+	gSnd¬dCh¬£ts
+;
+
+8 
+impÜt
+ 
+	gjava
+.
+	gnio
+.
+	gfe
+.
+	gFes
+;
+
+9 
+impÜt
+ 
+	gjava
+.
+	gnio
+.
+	gfe
+.
+	gP©hs
+;
+
+10 
+impÜt
+ 
+	gjava
+.
+	gnio
+.
+	gfe
+.
+	gSnd¬dO³nO±iÚ
+;
+
+11 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gA¼ayLi¡
+;
+
+12 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gA¼ays
+;
+
+13 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gLi¡
+;
+
+14 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gfunùiÚ
+.
+	gFunùiÚ
+;
+
+15 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	g¡»am
+.
+	gCŞËùÜs
+;
+
+17 
+impÜt
+ 
+	gjava
+.
+	gnio
+.
+	gfe
+.
+	gSnd¬dO³nO±iÚ
+.
+	gAPPEND
+;
+
+19 
+public
+ cÏs 
+	cXidStÜe
+ {
+
+20 
+´iv©e
+ 
+SŒšg
+ 
+	mxidFeName
+ = "xids.txt";
+
+22 
+public
+ 
+	$XidStÜe
+(
+SŒšg
+ 
+xidFeName
+) {
+
+23 
+this
+.
+xidFeName
+ = xidFileName;
+
+26 
+public
+ 
+	$maš
+(
+SŒšg
+[] 
+¬gs
+è
+throws
+ 
+Exû±iÚ
+ {
+
+37 
+	}
+}
+
+39 
+public
+ 
+boŞ—n
+ 
+	$wr™e
+(
+Xid
+ ... 
+lšes
+è
+throws
+ 
+Exû±iÚ
+ {
+
+40  
+	`wr™e
+((
+Xid
+ 
+xid
+è-> 
+Ãw
+ 
+	`XidIm¶
+(xid).
+	`toSŒšg
+(), 
+lšes
+);
+
+41 
+	}
+}
+
+43 @
+SaãV¬¬gs
+
+
+44 
+public
+ 
+	gfš®
+ <
+	gT
+> 
+boŞ—n
+ 
+wr™e
+(
+FunùiÚ
+<
+T
+, 
+SŒšg
+> 
+ty³ToSŒšg
+, T... 
+lšes
+è
+throws
+ 
+	gExû±iÚ
+ {
+
+45 
+FeOuutSŒ—m
+ 
+	gfos
+ğ
+Ãw
+ FeOuutSŒ—m(
+xidFeName
+, 
+Œue
+);
+
+46 
+FeLock
+ 
+	gæ
+ = 
+fos
+.
+g‘ChªÃl
+().
+lock
+();
+
+48 
+	gLi¡
+<
+	gSŒšg
+> 
+	gxidLi¡
+ = 
+A¼ays
+.
+¡»am
+(
+lšes
+).
+m­
+(
+ty³ToSŒšg
+).
+cŞËù
+(
+CŞËùÜs
+.
+toLi¡
+());
+
+50 ià(
+	gæ
+ !ğ
+nuÎ
+) {
+
+51 
+Œy
+ {
+
+52 
+Œy
+ {
+
+53 
+Fes
+.
+wr™e
+(
+P©hs
+.
+g‘
+(
+xidFeName
+), 
+xidLi¡
+, 
+Snd¬dCh¬£ts
+.
+UTF_8
+, 
+APPEND
+);
+
+54  
+	gŒue
+;
+
+55 } 
+	gfš®ly
+ {
+
+56 
+	gæ
+.
+»Ëa£
+();
+
+58 } 
+	gfš®ly
+ {
+
+59 
+	gfos
+.
+şo£
+();
+
+63  
+	gçl£
+;
+
+67 
+public
+ 
+	gLi¡
+<
+	gXid
+> 
+»ad
+(
+Li¡
+<
+Xid
+> 
+lšes
+è
+throws
+ 
+	gExû±iÚ
+ {
+
+68 
+FeIÅutSŒ—m
+ 
+	gfos
+ğ
+Ãw
+ FeIÅutSŒ—m(
+xidFeName
+);
+
+69 
+FeLock
+ 
+	gæ
+ = 
+fos
+.
+g‘ChªÃl
+().
+ŒyLock
+(0L, 
+LÚg
+.
+MAX_VALUE
+, 
+Œue
+);
+
+71 
+	gŒy
+ {
+
+72 ià(
+	gæ
+ !ğ
+nuÎ
+) {
+
+73 
+Œy
+ {
+
+74 
+Fes
+.
+»adAÎLšes
+(
+P©hs
+.
+g‘
+(
+xidFeName
+)).
+fÜEach
+((
+SŒšg
+ 
+™em
+è-> 
+lšes
+.
+add
+(
+Ãw
+ 
+XidIm¶
+(item)));
+
+75 } 
+	gfš®ly
+ {
+
+76 
+	gæ
+.
+»Ëa£
+();
+
+79 } 
+	gfš®ly
+{
+
+80 
+	gfos
+.
+şo£
+();
+
+83  
+	glšes
+;
+
+86 
+public
+ 
+	$»move
+(
+Xid
+ 
+xid
+è
+throws
+ 
+Exû±iÚ
+ {
+
+87 
+FeIÅutSŒ—m
+ 
+fos
+ğ
+Ãw
+ 
+	`FeIÅutSŒ—m
+(
+xidFeName
+);
+
+88 
+FeLock
+ 
+æ
+ = 
+fos
+.
+	`g‘ChªÃl
+().
+	`ŒyLock
+(0L, 
+LÚg
+.
+MAX_VALUE
+, 
+Œue
+);
+
+91 
+Œy
+ {
+
+92 ià(
+æ
+ !ğ
+nuÎ
+) {
+
+93 
+Li¡
+<
+SŒšg
+> 
+lšes
+ = 
+Ãw
+ 
+A¼ayLi¡
+<>();
+
+95 
+Œy
+ {
+
+96 
+lšes
+.
+	`addAÎ
+(
+Fes
+.
+	`»adAÎLšes
+(
+P©hs
+.
+	`g‘
+(
+xidFeName
+)));
+
+98 ià(
+lšes
+.
+	`»move
+(
+Ãw
+ 
+	`XidIm¶
+(
+xid
+).
+	`toSŒšg
+())) {
+
+99 
+Fes
+.
+	`wr™e
+(
+P©hs
+.
+	`g‘
+(
+xidFeName
+), 
+lšes
+);
+
+102 } 
+fš®ly
+ {
+
+103 
+æ
+.
+	`»Ëa£
+();
+
+106 } 
+fš®ly
+{
+
+107 
+fos
+.
+	`şo£
+();
+
+109 
+	}
+}
+
+	@
+1
+.
+1
+/usr/include
+16
+834
+d.sh
+interop/src/main/java/service/Controller.java
+interop/src/main/java/service/ControllerBean.java
+interop/src/main/java/service/SessionBean.java
+interop/src/main/java/service/TxnHelper.java
+interop/src/main/java/service/local/ISession.java
+interop/src/main/java/service/remote/ISession.java
+interop/src/main/java/service/remote/ISessionHome.java
+recovery/src/main/java/org/jboss/narayana/RecoveryBean.java
+recovery/src/main/java/org/jboss/narayana/RecoveryRegistration.java
+resource/src/main/java/org/jboss/narayana/ASFailureMode.java
+resource/src/main/java/org/jboss/narayana/ASFailureSpec.java
+resource/src/main/java/org/jboss/narayana/ASFailureType.java
+resource/src/main/java/org/jboss/narayana/DummyXAResource.java
+resource/src/main/java/org/jboss/narayana/XidImpl.java
+resource/src/main/java/org/jboss/narayana/XidStore.java
