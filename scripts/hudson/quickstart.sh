@@ -99,7 +99,7 @@ fi
 cd ..
 
 echo Running quickstarts
-BLACKTIE_DIST_HOME=$PWD/narayana/blacktie/blacktie/target/ mvn clean install -DskipX11Tests=true
+BLACKTIE_DIST_HOME=$PWD/narayana/blacktie/blacktie/target/ mvn clean install -DskipX11Tests=true $@
 
 if [ $? != 0 ]; then
   comment_on_pull "Pull failed: $BUILD_URL";
