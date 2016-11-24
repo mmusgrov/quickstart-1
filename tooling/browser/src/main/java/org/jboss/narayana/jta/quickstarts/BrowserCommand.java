@@ -32,12 +32,20 @@ import java.util.*;
 import com.arjuna.ats.arjuna.common.CoreEnvironmentBean;
 import com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean;
 import com.arjuna.ats.arjuna.common.RecoveryEnvironmentBean;
+import com.arjuna.ats.internal.arjuna.objectstore.hornetq.HornetqJournalEnvironmentBean;
 import com.arjuna.ats.arjuna.objectstore.StoreManager;
 import com.arjuna.ats.arjuna.recovery.RecoveryManager;
 import com.arjuna.ats.arjuna.state.InputObjectState;
 import com.arjuna.ats.arjuna.tools.osb.mbean.*;
 import com.arjuna.ats.arjuna.tools.osb.util.JMXServer;
 import com.arjuna.common.internal.util.propertyservice.BeanPopulator;
+
+
+import com.arjuna.ats.internal.jts.ORBManager;
+import com.arjuna.orbportability.OA;
+import com.arjuna.orbportability.ORB;
+import org.omg.CORBA.ORBPackage.InvalidName;
+import com.arjuna.ats.jts.common.jtsPropertyManager;
 
 import javax.management.*;
 
@@ -49,11 +57,15 @@ public abstract class BrowserCommand {
     private static String currentType = "";
     private static List<String> recordTypes = new ArrayList<String> ();
     private static InputStream cmdSource;
+    private static boolean isHQStore;
+
+    private static ORB orb;
+    private static OA oa;
 
     private enum CommandName {
         HELP("show command options and syntax"),
         SELECT("<type> - start browsing a particular transaction type"),
-        STORE_DIR("get/set the location of the object store"),
+        STORE_DIR("get/set the location of the object store (set fails due to JBTM-2654"),
         START(null),
         TYPES("list record types"),
         PROBE("refresh the view of the object store"),
@@ -84,7 +96,7 @@ public abstract class BrowserCommand {
     }
 
     private static void parseArgs(String[] args) throws FileNotFoundException {
-        String validOpts = "fsc";
+        String validOpts = "fsch";
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < args.length; i++) {
@@ -114,10 +126,19 @@ public abstract class BrowserCommand {
                             sb.append(args[i].trim()).append(System.lineSeparator());
 
                         break;
+                    case 'h':
+                        isHQStore = Boolean.valueOf(args[i]);
+                        break;
                     default:
                         throw new IllegalArgumentException(SYNTAX);
                 }
             }
+        }
+
+        try {
+            initOrb();
+        } catch (InvalidName invalidName) {
+            System.err.printf("Warning: unable to initialise JTS support: %s%n", invalidName);
         }
 
         if (currentStoreDir == null)
@@ -133,7 +154,7 @@ public abstract class BrowserCommand {
         File f = new File(name);
 
         if (!f.exists() || !(isDir ^ f.isFile()))
-            throw new IllegalArgumentException(name + " is not a valid " + (isDir ? " directory" : "file"));
+            throw new IllegalArgumentException("File " + name + " does not exist");
 
         return f;
     }
@@ -176,14 +197,19 @@ public abstract class BrowserCommand {
     protected boolean cancel() {return true;}
 
     private static void setupStore(String storeDir) throws Exception {
+        File store = new File(storeDir);
+
+        validateFile(storeDir, true);
+
         BeanPopulator.getDefaultInstance(RecoveryEnvironmentBean.class).setRecoveryModuleClassNames(Arrays.asList(
                 "com.arjuna.ats.internal.jta.recovery.arjunacore.CommitMarkableResourceRecordRecoveryModule",
                 "com.arjuna.ats.internal.arjuna.recovery.AtomicActionRecoveryModule",
                 "com.arjuna.ats.internal.jta.recovery.arjunacore.XARecoveryModule"
         ));
-        BeanPopulator.getDefaultInstance(ObjectStoreEnvironmentBean.class).setObjectStoreDir(storeDir);
-        BeanPopulator.getNamedInstance(ObjectStoreEnvironmentBean.class, "communicationStore").setObjectStoreDir(storeDir);
-        BeanPopulator.getDefaultInstance(CoreEnvironmentBean.class).setNodeIdentifier("no-recovery");
+
+        BeanPopulator.getDefaultInstance(RecoveryEnvironmentBean.class).setRecoveryActivatorClassNames(null);
+
+        setupStore(storeDir, isHQStore);
 
         System.setProperty(ObjStoreBrowser.OBJ_STORE_BROWSER_HANDLERS,
                 "com.arjuna.ats.internal.jta.tools.osb.mbean.jts.JTSXAResourceRecordWrapper=com.arjuna.ats.internal.jta.tools.osb.mbean.jts.JTSXAResourceRecordWrapper");
@@ -191,6 +217,38 @@ public abstract class BrowserCommand {
         osb = new ObjStoreBrowser(storeDir);
         osb.setExposeAllRecordsAsMBeans(true);
         osb.start(); // only required if we want to use JMX
+    }
+
+    private static void setupStore(String storeDir, boolean hqstore) throws Exception {
+        String storePath = new File(storeDir).getCanonicalPath();
+
+        if (hqstore) {
+            final String storeClassName = com.arjuna.ats.internal.arjuna.objectstore.hornetq.HornetqObjectStoreAdaptor.class.getName();
+
+            BeanPopulator.getDefaultInstance(HornetqJournalEnvironmentBean.class).setStoreDir(storePath);
+            BeanPopulator.getDefaultInstance(ObjectStoreEnvironmentBean.class).setObjectStoreType(storeClassName);
+            BeanPopulator.getNamedInstance(ObjectStoreEnvironmentBean.class, "communicationStore").setObjectStoreType(storeClassName);
+        }
+
+        BeanPopulator.getDefaultInstance(ObjectStoreEnvironmentBean.class).setObjectStoreDir(storePath);
+        BeanPopulator.getNamedInstance(ObjectStoreEnvironmentBean.class, "communicationStore").setObjectStoreDir(storePath);
+        BeanPopulator.getDefaultInstance(CoreEnvironmentBean.class).setNodeIdentifier("no-recovery");
+    }
+
+    private static void initOrb() throws InvalidName {
+        final Properties initORBProperties = new Properties();
+        initORBProperties.setProperty("com.sun.CORBA.POA.ORBServerId", "1");
+        initORBProperties.setProperty("com.sun.CORBA.POA.ORBPersistentServerPort", ""
+                + jtsPropertyManager.getJTSEnvironmentBean().getRecoveryManagerPort());
+
+        orb = ORB.getInstance("test");
+        oa = OA.getRootOA(orb);
+
+        orb.initORB(new String[] {}, initORBProperties);
+        oa.initOA();
+
+        ORBManager.setORB(orb);
+        ORBManager.setPOA(oa);
     }
 
     private static BrowserCommand[] commands = {
@@ -210,7 +268,6 @@ public abstract class BrowserCommand {
                 void execute(PrintStream printStream, List<String> args) throws Exception {
                     setupStore(currentStoreDir);
 
-                    RecoveryManager.manager(RecoveryManager.INDIRECT_MANAGEMENT).suspend(true);
                     Scanner scanner = new Scanner(cmdSource);
 
                     getCommand(CommandName.PROBE).execute(printStream, null);
@@ -219,9 +276,26 @@ public abstract class BrowserCommand {
                     while (!finished)
                         processCommand(printStream, scanner);
 
-                    RecoveryManager.manager().terminate();
+                    scanner.close();
+
+//                    RecoveryManager.manager().terminate();
+
                     StoreManager.shutdown();
-                }
+
+                    if (osb != null)
+                        osb.stop();
+
+
+                    if (orb != null) {
+                        oa.destroy();
+                        orb.shutdown();
+                    }
+
+                    try {
+                        RecoveryManager.manager().terminate(false);
+                    } catch (Throwable ignore) {
+                    }
+                 }
 
                 protected boolean cancel() {
                     finished = true;
@@ -332,9 +406,11 @@ public abstract class BrowserCommand {
                         getCommand(CommandName.SELECT).execute(printStream, args);
 
                     if (currentType.length() == 0) {
-                        printStream.printf("No type selected. Choose one of:%n");
-                        getCommand(CommandName.TYPES).execute(printStream, null);
-                        help(printStream);
+                        for (String type : recordTypes)
+                            listMBeans(printStream, type);
+//                        printStream.printf("No type selected. Choose one of:%n");
+//                        getCommand(CommandName.TYPES).execute(printStream, null);
+//                        help(printStream);
                     } else {
                         //List<UidWrapper> uids = osb.probe(currentType);
                         listMBeans(printStream, currentType);

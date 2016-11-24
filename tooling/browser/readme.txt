@@ -27,7 +27,9 @@ Interactive browser for examining transaction log MBeans
 
 USAGE
 -----
-mvn -e compile exec:java -Dexec.mainClass=org.jboss.narayana.jta.quickstarts.BrowserCommand -Dexec.args="path to tx-object-store"
+mvn -e compile exec:java -DisJournalStore=<false|true> -Dstore.directory=<object store location>
+
+Set isJournalStore=true if the transaction logs contain a journal store (defaults to false)
 
 EXPECTED OUTPUT
 ---------------
