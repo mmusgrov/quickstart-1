@@ -11,9 +11,14 @@ update glassfish/domains/domain2/config/domain.xml - I added 100 to each port
 (jdbc-connection-pool, JMS_PROVIDER_PORT, iiop-listener, jmx-connector, debug-options, jvm-options, http-listener-1). If the server fails to start with "Cannot bind to port" then review the port values set in each server config)
 
 Start the domain: asadmin start-domain domain1
+or: asadmin start-domain --debug=true domain1 # listens on port 9009 for jdb connections
 
 (NB the browser console is at the url http://localhost:4848/common/index.jsf)
 
+XXX location of logs:
+  standalone/data/tx-object-store/
+  appserver/distributions/glassfish/target/stage/glassfish4/glassfish/domains/domain1/logs/server/tx
+`
 Build narayana with interop fixes
 ----------------------------
 
@@ -141,4 +146,5 @@ will be moved to the AssumedCompleteServerTransaction part of the logs.
 Note also that glassfish will recover with a heuristic. This happens because no recovery information is
 associated with the recovery resource we registered in org.jboss.narayana.RecoveryBean so it should be
 resolvable (but it's a low priority task).
+
 

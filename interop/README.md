@@ -156,3 +156,12 @@ and it saves pending xids in a file called xids.txt. The xid entry in xids.txt s
 recovery is complete.
 
 
+========== Status ===
+./d.sh -t gfwf -t haltafter
+
+gf is the coordinator and makes a call to wf.
+gf commits the transaction
+gf commits the gf resource
+gf commits the wf resource
+wf halts during resource commit.
+Ends up as a heuristic hazard.
