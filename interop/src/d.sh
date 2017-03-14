@@ -1,7 +1,7 @@
 
-if [ "x$JBOSS_HOME" = "x" ]; then
-  JBOSS_HOME=~/source/forks/narayana/jboss-as/build/target/wildfly-10.1.0.Final-SNAPSHOT
-fi
+export PATH=$QS_DIR/tmp/glassfish/appserver/distributions/glassfish/target/stage/glassfish4/bin:$PATH
+export JBOSS_HOME=$QS_DIR/tmp/wildfly/build/target/wildfly-10.0.0.Final
+
 if [ ! -d "$JBOSS_HOME" ]; then echo "file not found: $JBOSS_HOME"; exit 1; fi
 
 WF_DEPLOY_DIR=$JBOSS_HOME/standalone/deployments

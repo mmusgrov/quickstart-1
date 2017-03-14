@@ -788,3 +788,16 @@ index 97e6c3d..a19b416 100644
  	otid.formatID = 0;
  	otid.tid = new byte[b.length+nodeName.length];
  	otid.bqual_length = nodeName.length;
+diff --git a/ArjunaJTS/jts/classes/com/arjuna/ats/internal/jts/interposition/resources/arjuna/Interposition.java b/ArjunaJTS/jts/classes/com/arjuna/ats/internal/jts/interposition/resources/arjuna/Interposition.java
+index 74ddaff..da14430 100644
+--- a/ArjunaJTS/jts/classes/com/arjuna/ats/internal/jts/interposition/resources/arjuna/Interposition.java
++++ b/ArjunaJTS/jts/classes/com/arjuna/ats/internal/jts/interposition/resources/arjuna/Interposition.java
+@@ -517,7 +517,7 @@ protected final void compareHierarchies (PropagationContext ctx, ServerTopLevelA
+ 	if (action != null)
+ 	{
+ 	    if (action.get_uid().notEquals(ctxHierarchy[depth])) {
+-            jtsLogger.i18NLogger.warn_interposition_resources_arjuna_iptl(action.get_uid(), ctxHierarchy[depth - 1]);
++            jtsLogger.i18NLogger.warn_interposition_resources_arjuna_iptl(action.get_uid(), ctxHierarchy[depth]);
+ 
+             printHierarchies = true;
+         }

@@ -11,6 +11,7 @@ cd $QS_DIR/tmp/narayana
 git checkout 939ba40 # TODO change this after the next release
 git apply $QS_DIR/JBTM-223.narayana.diff
 ./build.sh clean install -DskipTests
+cd $QS_DIR
 ```
 
 2. Patch and build glassfish
@@ -20,6 +21,7 @@ svn checkout https://svn.java.net/svn/glassfish~svn/trunk/main $QS_DIR/tmp/glass
 cd $QS_DIR/tmp/glassfish
 patch -p0 -i $QS_DIR/GLASSFISH-21532.diff 
 mvn install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -DskipTests
+cd $QS_DIR
 ```
 
 The patch fixes GLASSFISH-21532

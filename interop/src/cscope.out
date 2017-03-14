@@ -1,4 +1,4 @@
-cscope 15 $HOME/source/forks/narayana/quickstart/interop/src               0000038331
+cscope 15 $HOME/work/source/forks/narayana/quickstart/interop/src               0000038336
 	@d.sh
 
 2 [ "x$JBOSS_HOME" = "x" ]; 
