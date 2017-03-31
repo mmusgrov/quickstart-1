@@ -128,9 +128,9 @@
     </dependency>
   </dependencies>
   <modules>
+    <module>interop</module>
     <module>trailmap</module>
     <module>recovery</module>
     <module>standalone</module>
-    <module>interop</module>
   </modules>
 </project>

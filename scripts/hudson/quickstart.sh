@@ -127,7 +127,7 @@ function build_apache-karaf {
 function run_quickstarts {
   cd $WORKSPACE
   echo Running quickstarts
-  BLACKTIE_DIST_HOME=$PWD/narayana/blacktie/blacktie/target/ ./build.sh clean install -DskipX11Tests=true
+  BLACKTIE_DIST_HOME=$PWD/narayana/blacktie/blacktie/target/ ./build.sh -B clean install -DskipX11Tests=true
 
   if [ $? != 0 ]; then
     comment_on_pull "Pull failed: $BUILD_URL";
