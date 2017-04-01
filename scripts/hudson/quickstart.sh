@@ -68,10 +68,8 @@ function get_bt_dependencies {
   if [ "$?" -ne "1" ]; then
   DEP=`find  ~/.m2 -name '*centos70x64*.md5'|grep -v blacktie|wc -l`
       if [ "$DEP" -ne "6" ]; then
-      cd ~
       wget http://${JENKINS_HOST}/userContent/blacktie-thirdparty-centos70x64.tgz
       tar xzvf blacktie-thirdparty-centos70x64.tgz
-      cd -
       fi
   fi
 }
@@ -140,7 +138,7 @@ function run_quickstarts {
 int_env
 comment_on_pull "Started testing this pull request: $BUILD_URL"
 rebase_quickstart_repo
-get_bt_dependencies
+#get_bt_dependencies # JBTM-2878 missing userContent on JENKINS_HOST
 build_narayana
 configure_wildfly
 #build_apache-karaf # JBTM-2820 disable the karaf build
