@@ -6,8 +6,17 @@ source init.sh
 # patch and build WildFly 
 function build_wf {
   # WildFly blocks the import of foreign transactions, until that policy is changed we need to patch it:
-  cp -r $WORKSPACE/narayana/jboss-as $QS_DIR/tmp
-  cd $QS_DIR/tmp/jboss-as
+  if [ -d $WORKSPACE/narayana/jboss-as ]; then
+    cp -r $WORKSPACE/narayana/jboss-as $QS_DIR/tmp
+    cd $QS_DIR/tmp/jboss-as
+  else
+    # we need the source to be able to patch it
+    echo "WARNING could not find wildfly 5_BRANCH cloning instead"
+    git clone https://github.com/jbosstm/jboss-as.git $QS_DIR/tmp
+    cd $QS_DIR/tmp/wildfly
+    git checkout 5_BRANCH
+  fi
+
   git apply $QS_DIR/interop.wildfly.diff
 
   ./build.sh clean install -DskipTests -Drelease=true -Dlicense.skipDownloadLicenses=true -Dversion.org.jboss.narayana=$NARAYANA_CURRENT_VERSION
@@ -28,10 +37,10 @@ function build_demo {
   mvn clean install
 }
 
-rm -rf $QS_DIR/tmp
+# TODO rm -rf $QS_DIR/tmp
 mkdir -p $QS_DIR/tmp
 
 build_wf
-build_gf
+#build_gf
 build_demo
 

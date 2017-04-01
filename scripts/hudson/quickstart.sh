@@ -17,6 +17,11 @@
 
 #!/bin/bash
 
+function fatal {
+  echo "$1"; exit 1
+}
+
+[ $WORKSPACE ] || fatal "please set WORKSPACE to the quickstarts directory"
 NARAYANA_REPO=jbosstm
 NARAYANA_BRANCH="master"
 
@@ -35,6 +40,7 @@ function comment_on_pull
 }
 
 function int_env {
+  cd $WORKSPACE
   export GIT_ACCOUNT=jbosstm
   export GIT_REPO=quickstart
   export MFACTOR=2 # double wait timeout period for crash recovery QA tests
@@ -99,7 +105,6 @@ function build_narayana {
 function configure_wildfly {
   cd $WORKSPACE
   WILDFLY_MASTER_VERSION=10.1.0.Final
-  
   rm -rf wildfly-$WILDFLY_MASTER_VERSION
   wget -N http://download.jboss.org/wildfly/$WILDFLY_MASTER_VERSION/wildfly-$WILDFLY_MASTER_VERSION.zip
   unzip wildfly-$WILDFLY_MASTER_VERSION.zip
@@ -137,9 +142,9 @@ function run_quickstarts {
 
 int_env
 comment_on_pull "Started testing this pull request: $BUILD_URL"
-rebase_quickstart_repo
+#rebase_quickstart_repo
 #get_bt_dependencies # JBTM-2878 missing userContent on JENKINS_HOST
-build_narayana
+#build_narayana
 configure_wildfly
 #build_apache-karaf # JBTM-2820 disable the karaf build
 run_quickstarts
