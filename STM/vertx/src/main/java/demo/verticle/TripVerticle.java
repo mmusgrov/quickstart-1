@@ -4,33 +4,45 @@ import com.arjuna.ats.arjuna.AtomicAction;
 import demo.stm.Activity;
 
 import demo.stm.TheatreServiceImpl;
+import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
-class TripVerticle extends BaseVerticle {
-    private static int taxiServicePort = 8080;
-    private HttpClient taxiClient;
+public class TripVerticle extends BaseVerticle {
+    private static int tripServicePort = 8080;
+    private static int taxiServicePort = 8082;
+    private static int theatreServicePort = 8084;
 
+    private HttpClient httpClient;
+
+    private Activity taxService;
     private Activity theatreService;
 
-    static void deployVerticle(String[] args, boolean isVolatile, String verticleClassName) {
-        deployVerticle(args, isVolatile, verticleClassName, new TheatreServiceImpl(), "theatre");
+    public static void main(String[] args) {
+        parseArgs(args);
+        Vertx vertx = Vertx.vertx();
+
+        DeploymentOptions opts = new DeploymentOptions()
+                .setInstances(getNumberOfServiceInstances())
+                .setConfig(new JsonObject()
+                        .put("name", "trip")
+                        .put("port", getIntOption("port", tripServicePort)));
+
+        taxiServicePort = getIntOption("taxi.port", taxiServicePort);
+        theatreServicePort = getIntOption("theatre.port", taxiServicePort);
+
+        vertx.deployVerticle(TripVerticle.class.getName(), opts);
     }
 
     @Override
     Activity initService(Activity service) {
-        assert service != null;
+        httpClient = vertx.createHttpClient();
 
-        taxiServicePort = getIntOption("taxi.port", 8080);
-
-        taxiClient = vertx.createHttpClient();
-
-        theatreService = container.clone(new TheatreServiceImpl(), service); // TheatreService is Nested
-
-        return theatreService;
+        return null;
     }
 
     void initRoutes(Router router) {
@@ -44,14 +56,19 @@ class TripVerticle extends BaseVerticle {
         String taxiName =  routingContext.request().getParam("taxi");
 
         try {
-            AtomicAction A = new AtomicAction();
+            bookTheatre(httpClient, theatreServicePort);
+            bookTaxi(httpClient, taxiServicePort);
+
+            int activityCount = 0;
+
+/*            AtomicAction A = new AtomicAction();
 
             A.begin();
             theatreService.activity(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
             int activityCount = theatreService.getValue();
             // book the taxi too
-            bookTaxi(taxiClient, taxiServicePort);
-            A.commit();
+            bookTaxi(httpClient, taxiServicePort);
+            A.commit();*/
 
             routingContext.response()
                     .setStatusCode(201)
@@ -65,8 +82,15 @@ class TripVerticle extends BaseVerticle {
         }
     }
 
-    private void bookTaxi(HttpClient taxiClient, int taxiServicePort) {
-        taxiClient.post(taxiServicePort, "localhost", "/api/taxi/1")
+    private void bookTheatre(HttpClient client, int servicePort) {
+        httpClient.post(servicePort, "localhost", "/api/theatre/1")
+                .exceptionHandler(e -> System.out.printf("Theatre booking request failed: " + e.getLocalizedMessage()))
+                .handler(h -> System.out.printf("Taxi booking request ok"))
+                .end();
+    }
+
+    private void bookTaxi(HttpClient client, int servicePort) {
+        httpClient.post(servicePort, "localhost", "/api/taxi/1")
                 .exceptionHandler(e -> System.out.printf("Taxi booking request failed: " + e.getLocalizedMessage()))
                 .handler(h -> System.out.printf("Taxi booking request ok"))
                 .end();

@@ -36,6 +36,10 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
         return serviceName;
     }
 
+    public static int getNumberOfServiceInstances() {
+        return numberOfServiceInstances;
+    }
+
     static void deployVerticle(String[] args, boolean isVolatile, String verticleClassName, Activity activity, String verticleName) {
         container = isVolatile ?
                 new Container<>(Container.TYPE.RECOVERABLE, Container.MODEL.EXCLUSIVE) :
@@ -77,7 +81,7 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
                 defaultValue;
     }
 
-    private static void parseArgs(String[] args) {
+    static void parseArgs(String[] args) {
         options = new HashMap<>();
 
         Arrays.stream(args).forEach(BaseVerticle::addOption);
