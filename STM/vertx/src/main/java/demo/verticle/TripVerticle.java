@@ -1,12 +1,13 @@
 package demo.verticle;
 
-import com.arjuna.ats.arjuna.AtomicAction;
 import demo.stm.Activity;
 
-import demo.stm.TheatreServiceImpl;
+import io.vertx.core.CompositeFuture;
 import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -18,9 +19,6 @@ public class TripVerticle extends BaseVerticle {
     private static int theatreServicePort = 8084;
 
     private HttpClient httpClient;
-
-    private Activity taxService;
-    private Activity theatreService;
 
     public static void main(String[] args) {
         parseArgs(args);
@@ -40,7 +38,12 @@ public class TripVerticle extends BaseVerticle {
 
     @Override
     Activity initService(Activity service) {
-        httpClient = vertx.createHttpClient();
+        int idleTimeoutSecs = 1;  // TimeUnit.SECONDS
+        int connectTimeoutMillis = 1000; // TimeUnit.MILLISECONDS
+
+        httpClient = vertx.createHttpClient(
+                new HttpClientOptions().setIdleTimeout(idleTimeoutSecs)
+                        .setConnectTimeout(connectTimeoutMillis));;
 
         return null;
     }
@@ -55,25 +58,23 @@ public class TripVerticle extends BaseVerticle {
         String showName =  routingContext.request().getParam("name");
         String taxiName =  routingContext.request().getParam("taxi");
 
+        Future<String> theatreFuture = Future.future();
+        Future<String> taxiFuture = Future.future();
+
         try {
-            bookTheatre(httpClient, theatreServicePort);
-            bookTaxi(httpClient, taxiServicePort);
+            bookTheatre(theatreFuture, httpClient, theatreServicePort, showName);
+            bookTaxi(taxiFuture, httpClient, taxiServicePort, taxiName);
 
-            int activityCount = 0;
+            CompositeFuture.all(theatreFuture, taxiFuture).setHandler(result -> {
+                int status = result.succeeded() ? 201 : 500;
+                String msg = result.failed() ? result.cause().getMessage() : "";
 
-/*            AtomicAction A = new AtomicAction();
-
-            A.begin();
-            theatreService.activity(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
-            int activityCount = theatreService.getValue();
-            // book the taxi too
-            bookTaxi(httpClient, taxiServicePort);
-            A.commit();*/
-
-            routingContext.response()
-                    .setStatusCode(201)
-                    .putHeader("content-type", "application/json; charset=utf-8")
-                    .end(Json.encodePrettily(new ServiceResult(getServiceName(), Thread.currentThread().getName(), activityCount)));
+                routingContext.response()
+                        .setStatusCode(status)
+                        .putHeader("content-type", "application/json; charset=utf-8")
+                        .end(Json.encodePrettily(new ServiceResult(getServiceName(),
+                                Thread.currentThread().getName(), msg, 0, 0)));
+            });
         } catch (Exception e) {
             routingContext.response()
                     .setStatusCode(406)
@@ -82,17 +83,17 @@ public class TripVerticle extends BaseVerticle {
         }
     }
 
-    private void bookTheatre(HttpClient client, int servicePort) {
+    private void bookTheatre(Future<String> result, HttpClient client, int servicePort, String name) {
         httpClient.post(servicePort, "localhost", "/api/theatre/1")
-                .exceptionHandler(e -> System.out.printf("Theatre booking request failed: " + e.getLocalizedMessage()))
-                .handler(h -> System.out.printf("Taxi booking request ok"))
+                .exceptionHandler(e -> result.fail("Theatre booking request failed: " + e.getLocalizedMessage()))
+                .handler(h -> result.complete("Theatre booked"))
                 .end();
     }
 
-    private void bookTaxi(HttpClient client, int servicePort) {
+    private void bookTaxi(Future<String> result, HttpClient client, int servicePort, String name) {
         httpClient.post(servicePort, "localhost", "/api/taxi/1")
-                .exceptionHandler(e -> System.out.printf("Taxi booking request failed: " + e.getLocalizedMessage()))
-                .handler(h -> System.out.printf("Taxi booking request ok"))
+                .exceptionHandler(e -> result.fail("Taxi booking request failed: " + e.getLocalizedMessage()))
+                .handler(h -> result.complete("Taxi booked"))
                 .end();
     }
 }

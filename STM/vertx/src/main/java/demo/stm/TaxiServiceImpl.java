@@ -8,14 +8,14 @@ import org.jboss.stm.annotations.WriteLock;
 public class TaxiServiceImpl implements TaxiService {
     @State
     private int noOfCompletedActivities = 0;
+    private String name;
 
     public TaxiServiceImpl() {
-        // workaround for JBTM-1732
-        AtomicAction A = new AtomicAction();
+        this("");
+    }
 
-        A.begin();
-        init();
-        A.commit();
+    public TaxiServiceImpl(String name) {
+        this.name = name;
     }
 
     @Override

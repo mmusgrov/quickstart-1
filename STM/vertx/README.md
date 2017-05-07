@@ -1,4 +1,8 @@
 
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TripVerticle port=8080 count=10 taxi.port=8082 theatre.port=8084
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TaxiVolatileVerticle port=8082 count=4
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TheatreVolatileVerticle port=8084 count=4
+
 Another example of STM and Vert.x integration
 
 This quickstart introduces two vertx verticles with the aim of demonstrating the two extremes of how

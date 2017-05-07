@@ -14,10 +14,6 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import org.jboss.stm.Container;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle {
     static Container<Activity> container;
     private static Activity theService;
@@ -27,7 +23,7 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
 
     private static Uid uid = null;
 
-    private static Map<String, String> options;
+    private static ProgArgs options;
 
     private Activity mandatory;
     private String serviceName;
@@ -44,10 +40,12 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
         container = isVolatile ?
                 new Container<>(Container.TYPE.RECOVERABLE, Container.MODEL.EXCLUSIVE) :
                 new Container<>(Container.TYPE.PERSISTENT, Container.MODEL.SHARED);
+
         parseArgs(args);
 
         if (uid == null) {
             theService = container.create(activity);
+            initializeSTMObject(theService);
             uid = container.getIdentifier(theService);
             System.out.printf("CREATED uid=%s%n", uid == null ? "null" : uid.toString());
         }
@@ -61,34 +59,20 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
         vertx.deployVerticle(verticleClassName, opts);
     }
 
-    private static void addOption(String opt) {
-        if (opt != null && opt.contains("=")) {
-            String [] pair = opt.split("=");
-
-            options.put(pair[0], pair[1]);
-        }
-    }
-
     static int getIntOption(String optionName, int defaultValue) {
-        return options.containsKey(optionName) ?
-            Integer.parseInt(options.get(optionName)) :
-                defaultValue;
+        return options.getIntOption(optionName, defaultValue);
     }
 
     private static String getStringOption(String optionName, String defaultValue) {
-        return options.containsKey(optionName) ?
-                options.get(optionName) :
-                defaultValue;
+        return options.getStringOption(optionName, defaultValue);
     }
 
     static void parseArgs(String[] args) {
-        options = new HashMap<>();
+        options = new ProgArgs(args);
 
-        Arrays.stream(args).forEach(BaseVerticle::addOption);
-
-        httpPort = getIntOption("port", 8080);
+        httpPort = options.getIntOption("port", 8080);
         numberOfServiceInstances = getIntOption("count", 1);
-        String uidStr = getStringOption("uid", null);
+        String uidStr = options.getStringOption("uid", null);
 
         if (uidStr != null)
             uid = new Uid(uidStr);
@@ -200,10 +184,10 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
 
     // workaround for JBTM-1732
     static void initializeSTMObject(Activity activity) {
-/*        AtomicAction A = new AtomicAction();
+        AtomicAction A = new AtomicAction();
 
         A.begin();
         activity.init();
-        A.commit();*/
+        A.commit();
     }
 }

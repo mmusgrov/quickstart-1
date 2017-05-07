@@ -10,12 +10,6 @@ public class TheatreServiceImpl implements TheatreService {
     private int noOfCompletedActivities = 0;
 
     public TheatreServiceImpl() {
-        // workaround for JBTM-1732
-        AtomicAction A = new AtomicAction();
-
-        A.begin();
-        init();
-        A.commit();
     }
 
     @Override

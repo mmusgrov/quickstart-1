@@ -1,6 +1,11 @@
-package demo.stm;
+package demo.test;
 
 import com.arjuna.ats.arjuna.AtomicAction;
+import demo.stm.TaxiService;
+import demo.stm.TaxiServiceImpl;
+import demo.stm.TheatreService;
+import demo.stm.TheatreServiceImpl;
+import demo.test.ActivityBase;
 import org.jboss.stm.Container;
 import org.junit.Test;
 
