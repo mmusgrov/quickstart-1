@@ -1,4 +1,4 @@
-package demo.verticle;
+package demo.demo2;
 
 
 import java.util.Arrays;

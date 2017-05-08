@@ -28,7 +28,7 @@ public class StressTest extends AbstractVerticle {
         targetCnt = new CountDownLatch(target);
 
         if (opts.getStringOption("help", null) != null) {
-            System.out.printf("syntax: StressTest [parallelism=20] [requests=100] [url=/api/trip/Odeon/ABC]");
+            System.out.printf("syntax: StressTest [parallelism=20] [requests=100] [port=8080] [url=/api/trip/Odeon/ABC]");
             return;
         }
 
@@ -53,16 +53,21 @@ public class StressTest extends AbstractVerticle {
         HttpClient client = vertx.createHttpClient();
         String url = opts.getStringOption("url", "/api/trip/Odeon/ABC");
         int requests = opts.getIntOption("requests", 20);
+        int port = opts.getIntOption("port",8080);
+        boolean verbose = opts.getBooleanOption("verbose", false);
 
-        IntStream.rangeClosed(1, requests).forEach(i -> invokeService(client, 8080, "localhost", url));
+        IntStream.rangeClosed(1, requests).forEach(i -> invokeService(
+                client, port, "localhost", url, verbose));
     }
 
-    private void invokeService(HttpClient client, int port, String host, String url) {
+    private void invokeService(HttpClient client, int port, String host, String url, boolean verbose) {
         client.post(port, host, url)
                 .exceptionHandler(e -> {
                     incrFailCount(); System.out.printf("Theatre booking request failed: %s%n", e.getLocalizedMessage());
                 })
-                .handler(h -> incrPassCount())
+                .handler(h -> {
+                    incrPassCount(); if (verbose) System.out.printf("%s%n", h.toString());
+                })
                 .end();
     }
 

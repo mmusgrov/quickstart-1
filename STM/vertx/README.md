@@ -1,4 +1,22 @@
 
+1) Multiple volatile theatre service running in a single JVM sharing the same STM object:
+
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.VolatileTheatreVerticle 
+curl -X POST http://localhost:8080/api/theatre/A
+curl -X POST http://localhost:8080/api/theatre/A
+observe how each request is service on a different verticle instance
+
+Similarly performing GETs will show the same booking counts regardless of which verticle services it:
+curl -X GET http://localhost:8080/api/theatre 
+curl -X GET http://localhost:8080/api/theatre 
+
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripVerticle
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripSTMVerticle
+
+2) Multiple persistent theatre service running in a different JVMs sharing the same STM object:
+   STM objects must be @Pessimistic
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.NonVolatileTheatreVerticle 0:ffffc0a80008:aaaf:5910a57b:1
+
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TripVerticle port=8080 count=10 taxi.port=8082 theatre.port=8084
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TaxiVolatileVerticle port=8082 count=4
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TheatreVolatileVerticle port=8084 count=4
