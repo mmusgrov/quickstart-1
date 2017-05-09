@@ -23,21 +23,39 @@ Check that each JVM reports the correct number of bookings (namely 2):
 curl -X GET http://localhost:8080/api/theatre
 curl -X GET http://localhost:8082/api/theatre
 
-3) java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripVerticle
+3) Start theatre and taxi services on two endpoints and then a trip service on another. The trip
+  service makes REST calls to fulfil booking requests. Services can be started in different JVMs or
+  or just one:
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripVerticle
 
 This will start trip, theatre and taxi services on endpoints 8080, 8082 and 8084 respectively.
 (If you wish you can run the theatre service in a separate JVM by passing the arg theatre.local=false
 and starting it java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TheatreVerticle
 and similarly for the TaxiVerticle).
 
-Make bookings:
+Make a trip booking:
 curl -X POST http://localhost:8080/api/trip/Odeon/ABC
+and a single taxi booking:
+curl -X POST http://localhost:8084/api/taxi/1
 
-and check that the booking was made:
+and check that the bookings were made (should be 2 theatre bookings and 3 taxi bookings):
 curl -X GET http://localhost:8082/api/theatre
 curl -X GET http://localhost:8084/api/taxi
 
+4) Start a mutliple instances of a trip service all listening on the same endpoint.
+The trip service fulfils booking requests by updating shared STM objects representing the theatre and
+taxi booking services respectively.
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripSTMVerticle
 
+Make two trip bookings:
+curl -X POST http://localhost:8080/api/trip/Odeon/ABC
+curl -X POST http://localhost:8080/api/trip/Odeon/ABC
+
+observe that each booking is serviced by a different verticle. Check that number of theatre and taxi
+bookings is correct:
+
+curl -X GET http://localhost:8080/api/trip/theatre
+curl -X GET http://localhost:8080/api/trip/taxi
 
  
 
