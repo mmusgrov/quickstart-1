@@ -1,8 +1,8 @@
 package demo.verticle;
 
-import demo.stm.Activity;
-import demo.stm.TaxiServiceImpl;
-import demo.stm.TheatreServiceImpl;
+import demo.domain.Booking;
+import demo.domain.TaxiServiceImpl;
+import demo.domain.TheatreServiceImpl;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
@@ -11,7 +11,7 @@ public class TheatreVerticle extends BaseVerticle {
         deployVerticle(args, isVolatile, verticleClassName, new TheatreServiceImpl(), "theatre");
     }
 
-    Activity initService(Activity service) {
+    Booking initService(Booking service) {
         assert service != null;
 
         return container.clone(new TaxiServiceImpl(), service);

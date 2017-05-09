@@ -1,10 +1,11 @@
 package demo.verticle;
 
 import com.arjuna.ats.arjuna.AtomicAction;
-import demo.stm.Activity;
-import demo.stm.TaxiService;
-import demo.stm.TaxiServiceImpl;
-import demo.stm.TheatreServiceImpl;
+import demo.domain.Booking;
+import demo.domain.ServiceResult;
+import demo.domain.TaxiService;
+import demo.domain.TaxiServiceImpl;
+import demo.domain.TheatreServiceImpl;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
@@ -21,14 +22,14 @@ public class TripSTMVerticle extends BaseVerticle {
 
     private HttpClient httpClient;
 
-    private static Container<Activity> container;
+    private static Container<Booking> container;
     private static Container<TaxiService> taxiContainer;
 
     private static TaxiService taxiService;
     private static TaxiService altTaxiService;
-    private static Activity theatreService;
+    private static Booking theatreService;
 
-    private Activity theatreServiceClone;
+    private Booking theatreServiceClone;
     private TaxiService taxiServiceClone;
     private TaxiService altTaxiServiceClone;
 
@@ -57,7 +58,7 @@ public class TripSTMVerticle extends BaseVerticle {
     }
 
     @Override
-    Activity initService(Activity service) {
+    Booking initService(Booking service) {
         httpClient = vertx.createHttpClient();
 
         theatreServiceClone = container.clone(new TheatreServiceImpl(), theatreService);
@@ -83,12 +84,12 @@ public class TripSTMVerticle extends BaseVerticle {
         listBookings(routingContext, theatreServiceClone);
     }
 
-    private void listBookings(RoutingContext routingContext, Activity activity) {
+    private void listBookings(RoutingContext routingContext, Booking booking) {
         try {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            int activityCount = activity.getValue();
+            int activityCount = booking.getBookings();
             A.commit();
 
             routingContext.response()
@@ -115,16 +116,16 @@ public class TripSTMVerticle extends BaseVerticle {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            theatreServiceClone.activity(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            theatreServiceClone.book(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
             try {
                 taxiServiceClone.failingActivity();
             } catch (Exception e) {
-                altTaxiServiceClone.activity();
+                altTaxiServiceClone.book();
             }
 
-            theatreBookings = theatreService.getValue();
-            taxiBookings = taxiServiceClone.getValue();
-            altTaxiBookings = altTaxiServiceClone.getValue();
+            theatreBookings = theatreService.getBookings();
+            taxiBookings = taxiServiceClone.getBookings();
+            altTaxiBookings = altTaxiServiceClone.getBookings();
             A.commit();
 
             String res = String.format("%d bookings with alt taxi service", altTaxiBookings);

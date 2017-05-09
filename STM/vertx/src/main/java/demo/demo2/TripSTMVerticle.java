@@ -1,12 +1,13 @@
 package demo.demo2;
 
 import com.arjuna.ats.arjuna.AtomicAction;
-import demo.stm.Activity;
-import demo.stm.TaxiService;
-import demo.stm.TaxiServiceImpl;
-import demo.stm.TheatreService;
-import demo.stm.TheatreServiceImpl;
-import demo.verticle.ServiceResult;
+import demo.domain.Booking;
+import demo.domain.TaxiService;
+import demo.domain.TaxiServiceImpl;
+import demo.domain.TheatreService;
+import demo.domain.TheatreServiceImpl;
+import demo.domain.ServiceResult;
+import demo.util.ProgArgs;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
@@ -27,7 +28,7 @@ public class TripSTMVerticle extends AbstractVerticle {
     private static TaxiService altTaxiService;
     private static TheatreService theatreService;
 
-    private Activity theatreServiceClone;
+    private Booking theatreServiceClone;
     private TaxiService taxiServiceClone;
     private TaxiService altTaxiServiceClone;
 
@@ -115,12 +116,12 @@ public class TripSTMVerticle extends AbstractVerticle {
         listBookings(routingContext, theatreServiceClone, "theatre");
     }
 
-    private void listBookings(RoutingContext routingContext, Activity activity, String serviceName) {
+    private void listBookings(RoutingContext routingContext, Booking booking, String serviceName) {
         try {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            int activityCount = activity.getValue();
+            int activityCount = booking.getBookings();
             A.commit();
 
             routingContext.response()
@@ -147,16 +148,16 @@ public class TripSTMVerticle extends AbstractVerticle {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            theatreServiceClone.activity(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            theatreServiceClone.book(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
             try {
                 taxiServiceClone.failingActivity();
             } catch (Exception e) {
-                altTaxiServiceClone.activity();
+                altTaxiServiceClone.book();
             }
 
-            theatreBookings = theatreServiceClone.getValue();
-            taxiBookings = taxiServiceClone.getValue();
-            altTaxiBookings = altTaxiServiceClone.getValue();
+            theatreBookings = theatreServiceClone.getBookings();
+            taxiBookings = taxiServiceClone.getBookings();
+            altTaxiBookings = altTaxiServiceClone.getBookings();
             A.commit();
 
             String res = String.format("%d bookings with alt taxi service", altTaxiBookings);
@@ -173,7 +174,7 @@ public class TripSTMVerticle extends AbstractVerticle {
         }
     }
 
-    static void initSTMMemory(Activity service) {
+    static void initSTMMemory(Booking service) {
         AtomicAction A = new AtomicAction();
 
         A.begin();

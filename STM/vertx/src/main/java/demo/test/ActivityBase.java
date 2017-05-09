@@ -1,8 +1,8 @@
 package demo.test;
 
 import com.arjuna.ats.arjuna.AtomicAction;
-import demo.stm.TheatreService;
-import demo.stm.TheatreServiceImpl;
+import demo.domain.TheatreService;
+import demo.domain.TheatreServiceImpl;
 import org.jboss.stm.Container;
 import org.jboss.stm.LockException;
 
@@ -30,8 +30,8 @@ class ActivityBase {
 
             AtomicAction B = new AtomicAction();
             B.begin();
-            mandatoryClone.activity();
-            int value = mandatoryClone.getValue();
+            mandatoryClone.book();
+            int value = mandatoryClone.getBookings();
             B.commit();
 
             return value;
@@ -42,7 +42,7 @@ class ActivityBase {
         try {
             int value = future.get(); // the mandatory changes made in activity1 should not be visible from another thread
 
-            assertEquals(value, mandatory.getValue());
+            assertEquals(value, mandatory.getBookings());
         } catch (Exception e) {
             // expect a LockException since this thread should already have the WriteLock
             assertTrue(e.getMessage(), (e.getCause() instanceof LockException));

@@ -1,6 +1,5 @@
-package demo.stm;
+package demo.domain;
 
-import com.arjuna.ats.arjuna.AtomicAction;
 import org.jboss.stm.annotations.ReadLock;
 import org.jboss.stm.annotations.State;
 import org.jboss.stm.annotations.WriteLock;
@@ -21,7 +20,7 @@ public class TaxiServiceImpl implements TaxiService {
     @Override
     @WriteLock
     public void failingActivity()  throws Exception {
-//            activity(); // TODO state changes made inside a TopLevelAction are not rolled back on exception
+//            book(); // TODO state changes made inside a TopLevelAction are not rolled back on exception
         throw new Exception();
     }
 
@@ -32,13 +31,13 @@ public class TaxiServiceImpl implements TaxiService {
 
     @Override
     @WriteLock
-    public void activity() {
+    public void book() {
         noOfCompletedActivities += 1;
     }
 
     @Override
     @ReadLock
-    public int getValue() {
+    public int getBookings() {
         return noOfCompletedActivities;
     }
 }

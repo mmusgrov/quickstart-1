@@ -2,7 +2,9 @@ package demo.verticle;
 
 import com.arjuna.ats.arjuna.AtomicAction;
 import com.arjuna.ats.arjuna.common.Uid;
-import demo.stm.Activity;
+import demo.domain.Booking;
+import demo.domain.ServiceResult;
+import demo.util.ProgArgs;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
@@ -14,9 +16,9 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import org.jboss.stm.Container;
 
-public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle {
-    static Container<Activity> container;
-    private static Activity theService;
+public abstract class BaseVerticle<T extends Booking> extends AbstractVerticle {
+    static Container<Booking> container;
+    private static Booking theService;
 
     private static int numberOfServiceInstances = 1;
     private static int httpPort = 8080;
@@ -25,7 +27,7 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
 
     private static ProgArgs options;
 
-    private Activity mandatory;
+    private Booking mandatory;
     private String serviceName;
 
     String getServiceName() {
@@ -36,7 +38,7 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
         return numberOfServiceInstances;
     }
 
-    static void deployVerticle(String[] args, boolean isVolatile, String verticleClassName, Activity activity, String verticleName) {
+    static void deployVerticle(String[] args, boolean isVolatile, String verticleClassName, Booking booking, String verticleName) {
         container = isVolatile ?
                 new Container<>(Container.TYPE.RECOVERABLE, Container.MODEL.EXCLUSIVE) :
                 new Container<>(Container.TYPE.PERSISTENT, Container.MODEL.SHARED);
@@ -44,7 +46,7 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
         parseArgs(args);
 
         if (uid == null) {
-            theService = container.create(activity);
+            theService = container.create(booking);
             initializeSTMObject(theService);
             uid = container.getIdentifier(theService);
             System.out.printf("CREATED uid=%s%n", uid == null ? "null" : uid.toString());
@@ -88,7 +90,7 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
     public void start(Future<Void> future) {
         int listenerPort = config().getInteger("port", 8080);
 
-        serviceName = config().getString("name", "activity");
+        serviceName = config().getString("name", "book");
         mandatory = initService(theService);
 
         startServer(future, listenerPort);
@@ -131,7 +133,7 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
     }
 
 
-    abstract Activity initService(Activity service);
+    abstract Booking initService(Booking service);
 
     private void getUid(RoutingContext routingContext) {
         routingContext.response()
@@ -145,10 +147,10 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            int activityCount = mandatory.getValue(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            int activityCount = mandatory.getBookings(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
             A.commit();
 
-            System.out.printf("%s: cnt: %d%n", getServiceName(), mandatory.getValue());
+            System.out.printf("%s: cnt: %d%n", getServiceName(), mandatory.getBookings());
             routingContext.response()
                     .setStatusCode(201)
                     .putHeader("content-type", "application/json; charset=utf-8")
@@ -166,8 +168,8 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            mandatory.activity(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
-            int activityCount = mandatory.getValue();
+            mandatory.book(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            int activityCount = mandatory.getBookings();
             A.commit();
 
             routingContext.response()
@@ -183,11 +185,11 @@ public abstract class BaseVerticle<T extends Activity> extends AbstractVerticle 
     }
 
     // workaround for JBTM-1732
-    static void initializeSTMObject(Activity activity) {
+    static void initializeSTMObject(Booking booking) {
         AtomicAction A = new AtomicAction();
 
         A.begin();
-        activity.init();
+        booking.init();
         A.commit();
     }
 }

@@ -1,6 +1,7 @@
 package demo.demo2;
 
-import demo.verticle.ServiceResult;
+import demo.domain.ServiceResult;
+import demo.util.ProgArgs;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.DeploymentOptions;

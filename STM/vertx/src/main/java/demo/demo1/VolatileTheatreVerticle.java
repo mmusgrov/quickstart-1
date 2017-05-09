@@ -1,13 +1,13 @@
 package demo.demo1;
 
-import demo.stm.TheatreServiceImpl;
+import demo.domain.TheatreServiceImpl;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
 import org.jboss.stm.Container;
 
-import demo.stm.TheatreService;
+import demo.domain.TheatreService;
 
 public class VolatileTheatreVerticle extends TheatreVerticle {
     private static int port = 8080;

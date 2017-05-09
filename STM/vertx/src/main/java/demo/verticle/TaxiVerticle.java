@@ -1,7 +1,7 @@
 package demo.verticle;
 
-import demo.stm.Activity;
-import demo.stm.TaxiServiceImpl;
+import demo.domain.Booking;
+import demo.domain.TaxiServiceImpl;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
@@ -10,7 +10,7 @@ public class TaxiVerticle extends BaseVerticle {
         deployVerticle(args, isVolatile, verticleClassName, new TaxiServiceImpl(), "taxi");
     }
 
-    Activity initService(Activity service) {
+    Booking initService(Booking service) {
         assert service != null;
 
         return container.clone(new TaxiServiceImpl(), service);

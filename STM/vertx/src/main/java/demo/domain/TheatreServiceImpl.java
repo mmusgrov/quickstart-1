@@ -1,6 +1,5 @@
-package demo.stm;
+package demo.domain;
 
-import com.arjuna.ats.arjuna.AtomicAction;
 import org.jboss.stm.annotations.ReadLock;
 import org.jboss.stm.annotations.State;
 import org.jboss.stm.annotations.WriteLock;
@@ -19,13 +18,13 @@ public class TheatreServiceImpl implements TheatreService {
 
     @Override
     @WriteLock
-    public void activity() {
+    public void book() {
         noOfCompletedActivities += 1;
     }
 
     @Override
     @ReadLock
-    public int getValue() {
+    public int getBookings() {
         return noOfCompletedActivities;
     }
 }

@@ -1,4 +1,4 @@
-package demo.verticle;
+package demo.util;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;

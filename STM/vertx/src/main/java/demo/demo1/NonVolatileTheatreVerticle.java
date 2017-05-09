@@ -1,15 +1,14 @@
 package demo.demo1;
 
-import com.arjuna.ats.arjuna.AtomicAction;
 import com.arjuna.ats.arjuna.common.Uid;
-import demo.stm.TheatreServiceImpl;
+import demo.domain.TheatreServiceImpl;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
 import org.jboss.stm.Container;
 
-import demo.stm.TheatreService;
+import demo.domain.TheatreService;
 
 public class NonVolatileTheatreVerticle extends TheatreVerticle {
     private static int port = 8080;

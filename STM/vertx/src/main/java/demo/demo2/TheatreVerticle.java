@@ -1,9 +1,10 @@
 package demo.demo2;
 
 import com.arjuna.ats.arjuna.AtomicAction;
-import demo.stm.TheatreService;
-import demo.stm.TheatreServiceImpl;
-import demo.verticle.ServiceResult;
+import demo.domain.TheatreService;
+import demo.domain.TheatreServiceImpl;
+import demo.domain.ServiceResult;
+import demo.util.ProgArgs;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
@@ -16,7 +17,7 @@ import org.jboss.stm.Container;
 
 public class TheatreVerticle extends AbstractVerticle {
     private static ProgArgs options;
-    private static int port = 8080;
+    private static int port = 8082;
 
     private TheatreService serviceClone;
     private static TheatreService service;
@@ -105,10 +106,10 @@ public class TheatreVerticle extends AbstractVerticle {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            int activityCount = serviceClone.getValue(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            int activityCount = serviceClone.getBookings(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
             A.commit();
 
-            System.out.printf("%s: cnt: %d%n", getServiceName(), serviceClone.getValue());
+            System.out.printf("%s: cnt: %d%n", getServiceName(), serviceClone.getBookings());
             routingContext.response()
                     .setStatusCode(201)
                     .putHeader("content-type", "application/json; charset=utf-8")
@@ -126,8 +127,8 @@ public class TheatreVerticle extends AbstractVerticle {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            serviceClone.activity(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
-            int activityCount = serviceClone.getValue();
+            serviceClone.book(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            int activityCount = serviceClone.getBookings();
             A.commit();
 
             routingContext.response()

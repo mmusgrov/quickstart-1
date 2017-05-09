@@ -1,6 +1,6 @@
 package demo.demo1;
 
-import demo.verticle.StressTest;
+import demo.util.StressTest;
 
 import java.util.concurrent.ExecutionException;
 

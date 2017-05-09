@@ -9,8 +9,8 @@ import io.vertx.ext.web.RoutingContext;
 
 import com.arjuna.ats.arjuna.AtomicAction;
 
-import demo.stm.TheatreService;
-import demo.verticle.ServiceResult;
+import demo.domain.TheatreService;
+import demo.domain.ServiceResult;
 
 public abstract class TheatreVerticle extends AbstractVerticle {
     TheatreService serviceClone;
@@ -76,10 +76,10 @@ public abstract class TheatreVerticle extends AbstractVerticle {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            int activityCount = serviceClone.getValue(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            int activityCount = serviceClone.getBookings(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
             A.commit();
 
-            System.out.printf("%s: cnt: %d%n", getServiceName(), serviceClone.getValue());
+            System.out.printf("%s: cnt: %d%n", getServiceName(), serviceClone.getBookings());
             routingContext.response()
                     .setStatusCode(201)
                     .putHeader("content-type", "application/json; charset=utf-8")
@@ -97,8 +97,8 @@ public abstract class TheatreVerticle extends AbstractVerticle {
             AtomicAction A = new AtomicAction();
 
             A.begin();
-            serviceClone.activity(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
-            int activityCount = serviceClone.getValue();
+            serviceClone.book(); // done as a sub transaction of A since mandatory is annotated wiht @Nested
+            int activityCount = serviceClone.getBookings();
             A.commit();
 
             routingContext.response()

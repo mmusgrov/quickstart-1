@@ -1,16 +1,51 @@
 
-1) Multiple volatile theatre service running in a single JVM sharing the same STM object:
+1) theatre service verticles running in a single JVM sharing the same volatile STM object:
 
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.VolatileTheatreVerticle 
+Create 2 bookings:
 curl -X POST http://localhost:8080/api/theatre/A
 curl -X POST http://localhost:8080/api/theatre/A
-observe how each request is service on a different verticle instance
+observe how each request is serviced on a different verticle instance
 
 Similarly performing GETs will show the same booking counts regardless of which verticle services it:
 curl -X GET http://localhost:8080/api/theatre 
 curl -X GET http://localhost:8080/api/theatre 
 
-java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripVerticle
+2) theatre service verticles running in a different JVMs sharing the same persistent STM object:
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.NonVolatileTheatreVerticle
+java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.NonVolatileTheatreVerticle 0:ffffc0a80008:ae2f:5911a03e:1
+
+Create two bookings using services running in different JVMs:
+curl -X POST http://localhost:8080/api/theatre/A
+curl -X POST http://localhost:8082/api/theatre/A
+
+Check that each JVM reports the correct number of bookings (namely 2):
+curl -X GET http://localhost:8080/api/theatre
+curl -X GET http://localhost:8082/api/theatre
+
+3) java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripVerticle
+
+This will start trip, theatre and taxi services on endpoints 8080, 8082 and 8084 respectively.
+(If you wish you can run the theatre service in a separate JVM by passing the arg theatre.local=false
+and starting it java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TheatreVerticle
+and similarly for the TaxiVerticle).
+
+Make bookings:
+curl -X POST http://localhost:8080/api/trip/Odeon/ABC
+
+and check that the booking was made:
+curl -X GET http://localhost:8082/api/theatre
+curl -X GET http://localhost:8084/api/taxi
+
+
+
+ 
+
+
+
+
+
+=====
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripSTMVerticle
 
 2) Multiple persistent theatre service running in a different JVMs sharing the same STM object:

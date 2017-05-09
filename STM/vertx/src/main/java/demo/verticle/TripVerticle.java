@@ -1,7 +1,8 @@
 package demo.verticle;
 
-import demo.stm.Activity;
+import demo.domain.Booking;
 
+import demo.domain.ServiceResult;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
@@ -37,7 +38,7 @@ public class TripVerticle extends BaseVerticle {
     }
 
     @Override
-    Activity initService(Activity service) {
+    Booking initService(Booking service) {
         int idleTimeoutSecs = 1;  // TimeUnit.SECONDS
         int connectTimeoutMillis = 1000; // TimeUnit.MILLISECONDS
 
