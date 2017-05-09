@@ -1,17 +1,51 @@
+OVERVIEW
+--------
 
-1) theatre service verticles running in a single JVM sharing the same volatile STM object:
+Another example of STM and Vert.x integration
 
-java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.VolatileTheatreVerticle 
+This quickstart introduces 4 different aspects of how to combine STM with Vert.x
+
+Demo 1 shows a single JVM running multiple vertx instances sharing the same volatile STM object.
+Demo 2 uses the same STM object but makes it persistent and shows how to share it across address
+spaces.
+
+These two examples illustrate the different ways in which an application can be scaled whilst
+maintaining data consistency:
+
+ - verticle scaling by using better hardware so that more threads can do be used to service the
+   workload;
+ - horizontal scaling by using more servers so that the workload can be distributed to multiple JVMs
+
+
+
+First build a fat jar that contains all the classes needed to run both demos in a single jar:
+
+  mvn clean package
+
+
+Demo 1: Theatre service verticles running in a single JVM sharing the same volatile STM object:
+===============================================
+
+Usage:
+------
+
+  java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.VolatileTheatreVerticle 
+
 Create 2 bookings:
-curl -X POST http://localhost:8080/api/theatre/A
-curl -X POST http://localhost:8080/api/theatre/A
+
+  curl -X POST http://localhost:8080/api/theatre/A
+  curl -X POST http://localhost:8080/api/theatre/A
+
 observe how each request is serviced on a different verticle instance
 
 Similarly performing GETs will show the same booking counts regardless of which verticle services it:
-curl -X GET http://localhost:8080/api/theatre 
-curl -X GET http://localhost:8080/api/theatre 
 
-2) theatre service verticles running in a different JVMs sharing the same persistent STM object:
+  curl -X GET http://localhost:8080/api/theatre 
+  curl -X GET http://localhost:8080/api/theatre 
+
+Demo 2: theatre service verticles running in a different JVMs sharing the same persistent STM object:
+===============================================
+
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.NonVolatileTheatreVerticle
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.NonVolatileTheatreVerticle 0:ffffc0a80008:ae2f:5911a03e:1
 
@@ -23,7 +57,9 @@ Check that each JVM reports the correct number of bookings (namely 2):
 curl -X GET http://localhost:8080/api/theatre
 curl -X GET http://localhost:8082/api/theatre
 
-3) Start theatre and taxi services on two endpoints and then a trip service on another. The trip
+Demo 3: Start theatre and taxi services on two endpoints and then a trip service on another. The trip
+===============================================
+
   service makes REST calls to fulfil booking requests. Services can be started in different JVMs or
   or just one:
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripVerticle
@@ -42,7 +78,9 @@ and check that the bookings were made (should be 2 theatre bookings and 3 taxi b
 curl -X GET http://localhost:8082/api/theatre
 curl -X GET http://localhost:8084/api/taxi
 
-4) Start a mutliple instances of a trip service all listening on the same endpoint.
+Demo 4: Start a mutliple instances of a trip service all listening on the same endpoint.
+===============================================
+
 The trip service fulfils booking requests by updating shared STM objects representing the theatre and
 taxi booking services respectively.
 java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripSTMVerticle
@@ -61,36 +99,6 @@ curl -X GET http://localhost:8080/api/trip/taxi
 
 
 
-
-
-=====
-java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo2.TripSTMVerticle
-
-2) Multiple persistent theatre service running in a different JVMs sharing the same STM object:
-   STM objects must be @Pessimistic
-java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.demo1.NonVolatileTheatreVerticle 0:ffffc0a80008:aaaf:5910a57b:1
-
-java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TripVerticle port=8080 count=10 taxi.port=8082 theatre.port=8084
-java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TaxiVolatileVerticle port=8082 count=4
-java -cp target/stm-vertx-demo-5.6.0.Final-SNAPSHOT-fat.jar demo.verticle.TheatreVolatileVerticle port=8084 count=4
-
-Another example of STM and Vert.x integration
-
-This quickstart introduces two vertx verticles with the aim of demonstrating the two extremes of how
-to share data and manage concurency using STM. One extreme shows a single JVM running multiple vertx
-instances sharing the same STM object, whereas the other extreme shows multiple JVMs sharing the same
-STM object.
-
-The two examples illustrate the different ways in which an application can be scaled whilst maintaining
-data consistency:
-
- - verticle scaling by using better hardware so that more threads can do be used to service the
-   workload;
- - horizontal scaling by using more servers so that the workload can be distributed to multiple JVMs
-
-First build a fat jar that contains all the classes needed to run both demos in a single jar:
-
-  mvn clean package
 
 Demo 1: demo.verticle.VolatileTripVerticle
 ===============================================
