@@ -1,7 +1,7 @@
 ## Build the demo
 
 ```bash
-mvn clean package .xml
+mvn clean package
 ```
 
 ## Trip Demo
