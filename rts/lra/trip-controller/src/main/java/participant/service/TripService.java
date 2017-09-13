@@ -44,6 +44,9 @@ public class TripService extends BookingStore{
     @Inject
     private LRAClientAPI lraClient;
 
+    @Inject()
+    private LRAClientAPI flightControllerLRA;
+
     public Booking confirmBooking(Booking tripBooking) {
         System.out.printf("Confirming tripBooking id %s (%s) status: %s%n",
                 tripBooking.getId(), tripBooking.getName(), tripBooking.getStatus());
@@ -62,7 +65,7 @@ public class TripService extends BookingStore{
         Arrays.stream(tripBooking.getDetails()).filter(Booking::isCancelPending).forEach(b -> {
             URL url = LRAClient.lraToURL(b.getId(), "Invalid " + b.getType() + " tripBooking id format");
             try {
-                new LRAClient(url.getHost(), url.getPort()).cancelLRA(LRAClient.lraToURL(b.getId(), "Invalid " + b.getType() + " tripBooking id format"));
+                new LRAClient("flight-coorditor-url", 8080).cancelLRA(LRAClient.lraToURL(b.getId(), "Invalid " + b.getType() + " tripBooking id format"));
             } catch (URISyntaxException e) {
                 throw new GenericLRAException(url, Response.Status.BAD_REQUEST.getStatusCode(),String.format("%s: %s", "Invalid " + b.getType() + " tripBooking id format"), e);
             }

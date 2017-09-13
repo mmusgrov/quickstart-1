@@ -24,6 +24,10 @@ Obtain and unzip the Narayana distribution containing the LRA swarm coordinator 
 
 The trip, hotel and flight services all run in different JVMs and all listen on the different http ports.
 
+There are two coordinators ran in the example. You can simplify this to one coordinator by not running the
+second coordinator process and changing the lra.http.port of the flight-service. Running multiple coordinators
+simulates how different trust domains can interoperate.
+
 Start the coordinators:
 
 ```bash
@@ -69,66 +73,9 @@ curl -X POST  "http://localhost:8081/trip/book?flightNumber=BA123"
 
 You will need to have installed Minishift and have the tools in your command line.
 
-We provisioned Minishift as:
-```bash
-minishift start
-```
-
-Once you have the Minishift environment running the following steps allow you to provision and 
-run the quickstart on the PaaS
-```bash
-# Create a new project
-oc new-project lra-minishift
-
-# Deploy the LRA coordinator
-cd lra-coordinator && rm -rf target/ && mkdir target
-oc new-build --binary --name=lra-coordinator -l app=lra-coordinator
-cp $NARAYANA_INSTALL_LOCATION/rts/lra/lra-coordinator-swarm.jar target/
-sleep 10
-oc start-build lra-coordinator --from-dir=. --follow
-oc new-app lra-coordinator -l app=lra-coordinator
-oc expose service lra-coordinator
-# Deploy the Flight LRA coordinator
-oc new-build --binary --name=flight-lra-coordinator -l app=flight-lra-coordinator
-sleep 10
-oc start-build flight-lra-coordinator --from-dir=. --follow
-oc new-app flight-lra-coordinator -l app=flight-lra-coordinator
-oc expose service flight-lra-coordinator
-cd ..
-
-# Deploy the Flight Service
-cd flight-service
-oc new-build --binary --name=flight-service -l app=flight-service
-mvn clean package
-oc start-build flight-service --from-dir=. --follow
-oc new-app flight-service -l app=flight-service
-oc expose service flight-service
-cd ..
-# Deploy the Hotel Service
-cd hotel-service
-oc new-build --binary --name=hotel-service -l app=hotel-service
-mvn clean package
-oc start-build hotel-service --from-dir=. --follow
-oc new-app hotel-service -l app=hotel-service
-oc expose service hotel-service
-cd ..
-# Deploy the Trip Controller
-cd trip-controller
-oc new-build --binary --name=trip-controller -l app=trip-controller
-mvn clean package
-oc start-build trip-controller --from-dir=. --follow
-oc new-app trip-controller -l app=trip-controller
-oc expose service trip-controller
-cd ..
-```
-
-You can then run the client as above:
-
-```bash
-cd trip-client
-mvn exec:java -Dservice.http.host="trip-controller-lra-minishift.`minishift ip`.nip.io" -Dservice.http.port=80 cancel
-mvn exec:java -Dservice.http.host="trip-controller-lra-minishift.`minishift ip`.nip.io" -Dservice.http.port=80 confirm
-```
+Assuming that is the case and the LRA coordinator is available in $NARAYANA_INSTALL_LOCATION/rts/lra/
+you can execute the script run.sh to deploy the services, coordinators and execute a simple client
+application.
 
 To check the logs you can look at:
 ```bash
