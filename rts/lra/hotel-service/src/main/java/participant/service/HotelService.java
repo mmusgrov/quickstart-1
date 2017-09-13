@@ -22,22 +22,40 @@
 package participant.service;
 
 import participant.model.Booking;
+import participant.model.BookingStatus;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Response;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class HotelService extends BookingStore {
+public class HotelService {
+    private Map<String, Booking> bookings = new HashMap<>();
+
     public Booking book(String bid, String hotel, Integer beds) {;
         Booking booking = new Booking(bid, hotel, beds, "Hotel");
 
-        add(booking);
-
-        return booking;
+        return bookings.putIfAbsent(booking.getId(), booking);
     }
 
     public CompletableFuture<Booking> bookAsync(String bid, String hotel, Integer beds) {
         return CompletableFuture.supplyAsync(() -> book(bid, hotel, beds));
+    }
+
+    public Booking get(String bookingId) throws NotFoundException {
+        if (!bookings.containsKey(bookingId))
+            throw new NotFoundException(Response.status(404).entity("Invalid bookingId id: " + bookingId).build());
+
+        return bookings.get(bookingId);
+    }
+
+    public void updateBookingStatus(String bookingId, BookingStatus status) {
+        get(bookingId).setStatus(status);
     }
 }

@@ -21,9 +21,14 @@
  */
 package participant.demo;
 
+import io.narayana.lra.annotation.Compensate;
 import io.narayana.lra.annotation.CompensatorStatus;
+import io.narayana.lra.annotation.Complete;
 import io.narayana.lra.annotation.LRA;
+import io.narayana.lra.annotation.Leave;
 import io.narayana.lra.annotation.Status;
+import io.narayana.lra.client.InvalidLRAId;
+import io.narayana.lra.client.LRAClient;
 import participant.model.Booking;
 import participant.model.BookingStatus;
 import participant.service.TripService;
@@ -32,6 +37,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -47,20 +53,23 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static io.narayana.lra.client.LRAClient.LRA_HTTP_HEADER;
 
 @RequestScoped
 @Path(TripController.TRIP_PATH)
 @LRA(LRA.Type.SUPPORTS)
-public class TripController extends Compensator {
+public class TripController {
     public static final String HOTEL_PATH = "/hotel";
     public static final String HOTEL_NAME_PARAM = "hotelName";
     public static final String HOTEL_BEDS_PARAM = "beds";
@@ -78,6 +87,13 @@ public class TripController extends Compensator {
 
     @Inject
     private TripService tripService;
+    @Context
+    private UriInfo context;
+
+    @Context
+    private HttpServletRequest httpRequest;
+
+    private Map<String, CompensatorStatus> compensatorStatusMap = new HashMap<>();
 
     @PostConstruct
     private void initController() {
@@ -146,9 +162,6 @@ public class TripController extends Compensator {
     public Booking confirmTrip(Booking booking) throws BookingException {
         tripService.confirmBooking(booking);
 
-        if (!TripCheck.validateBooking(booking, hotelTarget, flightTarget))
-            throw new BookingException(INTERNAL_SERVER_ERROR.getStatusCode(), "LRA response data does not match booking data");
-
         booking.setStatus(BookingStatus.CONFIRMED);
 
         return booking;
@@ -161,9 +174,6 @@ public class TripController extends Compensator {
     @LRA(LRA.Type.SUPPORTS) // the confirmation could be part of an enclosing LRA
     public Booking cancelTrip(Booking booking) throws BookingException {
         tripService.cancelBooking(booking);
-
-        if (!TripCheck.validateBooking(booking, hotelTarget, flightTarget))
-            throw new BookingException(INTERNAL_SERVER_ERROR.getStatusCode(), "LRA response data does not match booking data");
 
         booking.setStatus(BookingStatus.CANCELLED);
 
@@ -222,7 +232,13 @@ public class TripController extends Compensator {
         return tripService.get(bookingId);
     }
 
-    @Override
+    /**
+     * Tell the compensator to move to the requested state.
+     *
+     * @param status the next state to move to
+     * @param bookingId the current LRA context
+     * @return the state that compensator achieved
+     */
     protected CompensatorStatus updateCompensator(CompensatorStatus status, String bookingId) {
         switch (status) {
             case Completed:
@@ -234,6 +250,108 @@ public class TripController extends Compensator {
             default:
                 return status;
         }
+    }
+
+    protected String getCompensatorData(String activityId) {
+        return null;
+    }
+    /**
+     * Get the LRA context of the currently running method.
+     * Note that @HeaderParam(LRA_HTTP_HEADER) does not match the header (done't know why) so we the httpRequest
+     *
+     * @return the LRA context of the currently running method
+     */
+    protected String getCurrentActivityId() {
+        return httpRequest.getHeader(LRA_HTTP_HEADER);
+    }
+
+    @POST
+    @Path("/complete")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Complete
+    public Response completeWork() throws NotFoundException {
+        return updateState(CompensatorStatus.Completed, getCurrentActivityId());
+    }
+
+    @POST
+    @Path("/compensate")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Compensate
+    public Response compensateWork() throws NotFoundException {
+        return updateState(CompensatorStatus.Compensated, getCurrentActivityId());
+    }
+
+    @GET
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Status
+    @LRA(LRA.Type.NOT_SUPPORTED)
+    public Response status() throws NotFoundException {
+        String lraId = getCurrentActivityId();
+
+        if (lraId == null)
+            throw new InvalidLRAId("null", "not present on CompletionHandler#status request", null);
+
+        if (!compensatorStatusMap.containsKey(lraId))
+            throw new InvalidLRAId(lraId, "CompletionHandler#status request: unknown lra id", null);
+
+        // return status ok together with optional completion data or one of the other codes with a url that
+        // returns
+
+        /*
+         * the compensator will either return a 200 OK code (together with optional completion data) or a URL which
+         * indicates the outcome. That URL can be probed (via GET) and will simply return the same (implicit) information:
+         *
+         * <URL>/cannot-compensate
+         * <URL>/cannot-complete
+         *
+         * TODO I am returning the status url instead. And if the status is compensated or completed then performing
+         * GET on it will return 200 OK together with a compensator specific string that the business operation can
+         * reason about, otherwise some other suitable status code is returned together with one of he valid
+         * compensator states.
+         */
+        return updateState(compensatorStatusMap.get(lraId), lraId);
+    }
+
+    @PUT
+    @Path("/leave")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Leave
+    public Response leaveWork(@HeaderParam(LRA_HTTP_HEADER) String lraId) throws NotFoundException {
+        return Response.ok().build();
+    }
+
+    /**
+     * If the compensator was successful return a 200 status code and optionally an application specific string
+     * that can be used by whoever closed the LRA (that triggered this compensator).
+     * <p>
+     * Otherwise return a status url that can be probed to obtain the final outcome when it is ready
+     *
+     * @param status
+     * @param activityId
+     * @return
+     */
+    private Response updateState(CompensatorStatus status, String activityId) {
+
+        CompensatorStatus newStatus = updateCompensator(status, activityId);
+
+        compensatorStatusMap.put(activityId, newStatus); // NB in the demo we never remove completed activities
+
+        switch (newStatus) {
+            case Completed:
+            case Compensated:
+                String data = getCompensatorData(activityId);
+
+                return data == null ? Response.ok().build() : Response.ok(data).build();
+            default:
+                String statusUrl = getStatusUrl(activityId);
+
+                return Response.status(Response.Status.ACCEPTED).entity(Entity.text(statusUrl)).build();
+        }
+    }
+
+    private String getStatusUrl(String lraId) {
+        return String.format("%s/%s/activity/status", context.getBaseUri(), LRAClient.getLRAId(lraId));
     }
 }
 
