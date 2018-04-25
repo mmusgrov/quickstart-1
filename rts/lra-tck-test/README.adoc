@@ -1,0 +1,13 @@
+This project runs the swarm implementation of LRA against the microprofile-lra TCK.
+The LRA swarm fraction automatically pulls in the implementation.
+The microprofile-lra TCK dependency pulls in the TCK.
+
+The project includes the swarm plugin which will start a container with the LRA support under test. It expects an LRA coordinator to be running - the host and port number of this endpoint should be configured using the system properties lra.http.host and lra.http.port respectively. For example if the coordinator is listening on localhost and port 8083 the use:
+
+mvn clean package && java -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dlra.http.port=8083 -jar target/lra-tck-swarm.jar 
+
+To test another LRA implementation you will also need to depend on the TCK and similarly start a container with your own implementation of the LRA specifation. 
+
+With this set up you may trigger the TCK by sending a PUT request to the path tck/run:
+
+curl -XPUT http://localhost:8080/tck/run
