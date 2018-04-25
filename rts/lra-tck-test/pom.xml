@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>lra.demo</groupId>
+    <artifactId>lra-tck-swarm-tck-runner</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Swarm LRA TCK Test Runner</name>
+
+    <packaging>war</packaging>
+
+    <properties>
+        <version.wildfly-swarm>2018.5.0-SNAPSHOT</version.wildfly-swarm>
+        <version.microprofile-lra-tck>1.0-SNAPSHOT</version.microprofile-lra-tck>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <finalName>lra-tck</finalName>
+        <plugins>
+            <!-- the swarm plugin starts a swarm container -->
+            <plugin>
+                <groupId>org.wildfly.swarm</groupId>
+                <artifactId>wildfly-swarm-plugin</artifactId>
+                <version>${version.wildfly-swarm}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- pull in the microprofile-lra TCK which contains the JAX-RS resource
+        for running the TCK. The swarm plugin will start a swarm container
+        whic will detect the JAX-RS resources pulled in by the following TCK dependency
+          -->
+        <dependency>
+            <groupId>org.eclipse.microprofile.lra</groupId>
+            <artifactId>microprofile-lra-tck</artifactId>
+            <version>${version.microprofile-lra-tck}</version>
+        </dependency>
+        <!-- pull in the swarm implementation of the LRA API -->
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>microprofile-lra</artifactId>
+            <version>${version.wildfly-swarm}</version>
+        </dependency>
+    </dependencies>
+</project>
