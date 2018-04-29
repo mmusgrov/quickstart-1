@@ -13,6 +13,7 @@
     <properties>
         <version.wildfly-swarm>2018.5.0-SNAPSHOT</version.wildfly-swarm>
         <version.microprofile-lra-tck>1.0-SNAPSHOT</version.microprofile-lra-tck>
+        <swarm.debug.port>5005</swarm.debug.port>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -27,6 +28,17 @@
                 <groupId>org.wildfly.swarm</groupId>
                 <artifactId>wildfly-swarm-plugin</artifactId>
                 <version>${version.wildfly-swarm}</version>
+                <configuration>
+                    <jvmArguments>
+                        <jvmArgument>-enableassertions</jvmArgument>
+                    </jvmArguments>
+                    <debugPort>${swarm.debug.port}</debugPort>
+                    <properties>
+                        <swarm.http.port>8080</swarm.http.port>
+                        <lra.http.port>8082</lra.http.port>
+                        <swarm.debug.port>${swarm.debug.port}</swarm.debug.port>
+                    </properties>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
