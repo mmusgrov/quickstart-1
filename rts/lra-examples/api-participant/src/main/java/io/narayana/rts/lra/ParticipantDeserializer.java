@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
 
-public class ParticipantDeserializer {//implements LRAParticipantDeserializer {
-//    @Override
+public class ParticipantDeserializer {
     public LRAParticipant deserialize(URL lraId, byte[] data) {
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
             return (LRAParticipant) ois.readObject();

@@ -1,14 +1,11 @@
 package io.narayana.rts.lra;
 
-import org.eclipse.microprofile.lra.annotation.CompensatorStatus;
-import org.eclipse.microprofile.lra.client.LRAClient;
+import org.eclipse.microprofile.lra.annotation.ParticipantStatus;
 import org.eclipse.microprofile.lra.participant.JoinLRAException;
 import org.eclipse.microprofile.lra.participant.LRAManagement;
 import org.eclipse.microprofile.lra.participant.LRAParticipant;
 import org.eclipse.microprofile.lra.participant.TerminationException;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -22,8 +19,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.URL;
-import java.time.temporal.ChronoUnit;
+import java.net.URI;
 import java.util.concurrent.Future;
 
 @Path("/")
@@ -32,9 +28,6 @@ public class ProxyBasedResource implements LRAParticipant, Serializable {
 
     @Inject
     private StateHolder stats;
-
-    @Inject
-    private LRAClient lraClient;
 
     @Inject
     private LRAManagement lraManagement;
@@ -61,6 +54,7 @@ public class ProxyBasedResource implements LRAParticipant, Serializable {
     @Path("/api")
     @PUT
     public String doInTransaction(@QueryParam("fault") String fault) throws JoinLRAException {
+        /*
         getStateHolder().setFault(fault);
         URL lraId = lraClient.startLRA("No CDI based client", 0L, ChronoUnit.MILLIS);
 
@@ -69,7 +63,7 @@ public class ProxyBasedResource implements LRAParticipant, Serializable {
 
         // do something interesting
         lraClient.closeLRA(lraId);
-        getStateHolder().injectFault(StateHolder.FaultTarget.API, StateHolder.FaultWhen.AFTER);
+        getStateHolder().injectFault(StateHolder.FaultTarget.API, StateHolder.FaultWhen.AFTER);*/
 
         return getStateHolder().toString();
     }
@@ -82,16 +76,16 @@ public class ProxyBasedResource implements LRAParticipant, Serializable {
     }
 
     @Override
-    public Future<Void> completeWork(URL lraId) throws NotFoundException, TerminationException {
-        getStateHolder().update(StateHolder.FaultTarget.API, CompensatorStatus.Completed);
+    public Future<Void> completeWork(URI lraId) throws NotFoundException, TerminationException {
+        getStateHolder().update(StateHolder.FaultTarget.API, ParticipantStatus.Completed);
         getStateHolder().injectFault(StateHolder.FaultTarget.API, StateHolder.FaultWhen.DURING);
 
         return null;
     }
 
     @Override
-    public Future<Void> compensateWork(URL lraId) throws NotFoundException, TerminationException {
-        getStateHolder().update(StateHolder.FaultTarget.API, CompensatorStatus.Completed);
+    public Future<Void> compensateWork(URI lraId) throws NotFoundException, TerminationException {
+        getStateHolder().update(StateHolder.FaultTarget.API, ParticipantStatus.Completed);
         getStateHolder().injectFault(StateHolder.FaultTarget.API, StateHolder.FaultWhen.DURING);
 
         return null;

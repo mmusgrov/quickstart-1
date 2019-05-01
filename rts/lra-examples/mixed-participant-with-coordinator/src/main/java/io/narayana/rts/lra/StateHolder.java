@@ -1,6 +1,6 @@
 package io.narayana.rts.lra;
 
-import org.eclipse.microprofile.lra.annotation.CompensatorStatus;
+import org.eclipse.microprofile.lra.annotation.ParticipantStatus;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
@@ -13,7 +13,6 @@ import static io.narayana.rts.lra.StateHolder.FaultTarget.NONE;
 import static io.narayana.rts.lra.StateHolder.FaultType.HALT;
 import static io.narayana.rts.lra.StateHolder.FaultWhen.AFTER;
 import static io.narayana.rts.lra.StateHolder.FaultWhen.BEFORE;
-import static io.narayana.rts.lra.StateHolder.FaultWhen.NOW;
 
 @ApplicationScoped
 public class StateHolder implements Serializable {
@@ -24,8 +23,12 @@ public class StateHolder implements Serializable {
     private FaultType type = FaultType.NONE;
     private FaultWhen when = FaultWhen.DURING;
 
-    enum FaultTarget {CDI, API, MIXED, NONE};
-    enum FaultType {HALT, NONE};
+    enum FaultTarget {
+        CDI, API, MIXED, NONE
+    }
+    enum FaultType {
+        HALT, NONE
+    }
     enum FaultWhen { // when to inject a fault
         NOW, // immediately
         BEFORE, // before the end phase
@@ -33,11 +36,11 @@ public class StateHolder implements Serializable {
         AFTER // after the end phase
     };
 
-    public int getCompletedCount() {
+    private int getCompletedCount() {
         return completedCount.get();
     }
 
-    public int getCompensatedCount() {
+    private int getCompensatedCount() {
         return compensatedCount.get();
     }
 
@@ -46,21 +49,21 @@ public class StateHolder implements Serializable {
         return String.format("%d completed and %d compensated", getCompletedCount(), getCompensatedCount());
     }
 
-    public void update(FaultTarget target, CompensatorStatus status) {
+    public void update(FaultTarget target, ParticipantStatus status) {
         if (status == null) {
             injectFault(target, BEFORE);
         }
 
-        if (status == CompensatorStatus.Completed) {
+        if (status == ParticipantStatus.Completed) {
             completedCount.incrementAndGet();
             System.out.printf("%d completions%n", completedCount.get());
-        } else if (status == CompensatorStatus.Compensated) {
+        } else if (status == ParticipantStatus.Compensated) {
             System.out.printf("%d compensations%n", compensatedCount.get());
             compensatedCount.incrementAndGet();
         }
     }
 
-    void injectFault(FaultTarget target, FaultWhen when) {
+    private void injectFault(FaultTarget target, FaultWhen when) {
         if (this.target == target && this.when == when) {
             System.out.printf("injecting fault type %s ...%n", type);
 

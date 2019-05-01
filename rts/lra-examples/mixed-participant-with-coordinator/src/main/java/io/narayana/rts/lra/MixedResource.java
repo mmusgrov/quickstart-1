@@ -1,6 +1,6 @@
 package io.narayana.rts.lra;
 
-import org.eclipse.microprofile.lra.annotation.LRA;
+import org.eclipse.microprofile.lra.annotation.ws.rs.LRA;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -24,11 +24,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import static org.eclipse.microprofile.lra.client.LRAClient.LRA_HTTP_HEADER;
-import static org.eclipse.microprofile.lra.client.LRAClient.LRA_HTTP_RECOVERY_HEADER;
+import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT_HEADER;
+import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_RECOVERY_HEADER;
 
 /**
- * for testing {@link org.eclipse.microprofile.lra.annotation.LRA}
+ * for testing {@link org.eclipse.microprofile.lra.annotation.ws.rs.LRA}
  * in combination with {@link org.eclipse.microprofile.lra.participant.LRAManagement}
  */
 @Path("/")
@@ -65,7 +65,7 @@ public class MixedResource {
     @PUT
     public void doInTransaction(@DefaultValue("") @QueryParam("fault") String fault,
                                   @HeaderParam(LRA_HTTP_RECOVERY_HEADER) String rcvId,
-                                  @HeaderParam(LRA_HTTP_HEADER) String lraId) throws MalformedURLException {
+                                  @HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) throws MalformedURLException {
         URL lra = new URL(lraId);
 
         doWork(lra, "/cdi", fault);
