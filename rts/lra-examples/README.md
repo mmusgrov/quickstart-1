@@ -1,11 +1,15 @@
 # MicroProfile LRA Examples
 
-[MicroProfile LRA](https://github.com/eclipse/microprofile-lra) is a specification of an API that
-enables loosely coupled services to coordinate long running activities in such a way as to
-guarantee a globally consistent outcome without the need to take long duration locks on data.
+[MicroProfile LRA](https://github.com/eclipse/microprofile-lra) is an annotation based
+ specification that enables loosely coupled services to coordinate long running activities
+in such a way as to guarantee a globally consistent outcome without the need to take long duration locks on data.
+To build and run all of the examples type
 
+```
+    mvn clean install
+```
 
-These examples take a normal WAR and wraps them into -swarm runnable jars.
+The examples take a normal WAR and wrap them into -thorntail runnable jars.
 
 Each project uses maven war packaging in the `pom.xml`
 
@@ -38,18 +42,6 @@ Five quickstarts are included:
 ## cdi-participant
 
 [Shows a service which registers with an external LRA coordinator using CDI annotations](#cdi-participant/README.md)
-
-## api-participant-with-coordinator
-
-[Shows a service which registers with an embedded LRA coordinator using the Java LRA API (instead of annotations) to start and end an LRA and for joining the LRA](#api-participant-with-coordinator/README.md)
-
-## api-participant
-
-[Shows a service which registers with an external LRA coordinator using the Java LRA API (instead of annotations) to start and end an LRA and for joining the LRA](#api-participant/README.md)
-
-## mixed-participant-with-coordinator
-
-[Shows a service which starts an LRA and then invokes the CDI and API based examples using JAX-RS calls.](#mixed-participant-with-coordinator/README.md)
 
 ## Running an external LRA coordinator
 
