@@ -1,0 +1,13 @@
+.classpath
+.settings/
+.project
+.metadata/
+
+*.iml
+.idea
+
+target/
+
+.DS_Store
+ObjectStore/
+PutObjectStoreDirHere/
