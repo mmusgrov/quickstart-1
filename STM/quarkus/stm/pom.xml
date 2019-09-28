@@ -109,17 +109,11 @@
                 </goals>
                 <configuration>
                   <enableHttpUrlHandler>true</enableHttpUrlHandler>
-                  <additionalBuildArgs/>
-                  <additionalBuildArgs>
-                    <!--<additionalBuildArg>&#45;&#45;initialize-at-run-time=com.arjuna.ats.arjuna.utils.ThreadUtil</additionalBuildArg>
-                    <additionalBuildArg>&#45;&#45;initialize-at-run-time=com.arjuna.ats.arjuna.coordinator.TransactionReaper</additionalBuildArg>-->
-                    <additionalBuildArg>-H:+TraceClassInitialization</additionalBuildArg>
 <!--
-                    <additionalBuildArg>-H:ReflectionConfigurationFiles=${project.basedir}/reflection.json</additionalBuildArg>
--->
+                  <additionalBuildArgs>
                     <additionalBuildArg>-H:DynamicProxyConfigurationFiles=${project.basedir}/proxies.json</additionalBuildArg>
                   </additionalBuildArgs>
-
+-->
                 </configuration>
               </execution>
             </executions>

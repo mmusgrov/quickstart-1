@@ -55,6 +55,7 @@
     </plugins>
   </build>
   <modules>
+    <module>quarkus</module>
     <module>optimistic</module>
     <module>pessimistic</module>
     <module>jta</module>

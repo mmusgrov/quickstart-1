@@ -26,7 +26,6 @@ public class FlightResource {
     }
 
     @POST
-    @Path("async")
     @Produces(MediaType.TEXT_PLAIN)
     public CompletionStage<String> asynBook() {
         return CompletableFuture.supplyAsync(() -> {
@@ -39,6 +38,7 @@ public class FlightResource {
     }
 
     @POST
+    @Path("sync")
     @Produces(MediaType.TEXT_PLAIN)
     public String book() {
         FlightService flightService = factory.getInstance();
