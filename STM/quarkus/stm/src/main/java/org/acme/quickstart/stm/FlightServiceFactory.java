@@ -6,11 +6,10 @@ import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 class FlightServiceFactory {
-    private Container<FlightService> container;
     private FlightService flightServiceProxy;
 
     private void initFlightServiceFactory() {
-        container = new Container<>();
+        Container<FlightService> container = new Container<>();
         flightServiceProxy = container.create(new FlightServiceImpl());
     }
 

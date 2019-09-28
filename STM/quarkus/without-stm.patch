@@ -1,0 +1,14 @@
+diff --git a/STM/quarkus/stm/src/main/java/org/acme/quickstart/stm/FlightServiceFactory.java b/STM/quarkus/stm/src/main/java/org/acme/quickstart/stm/FlightServiceFactory.java
+index f9890c7cf..c295cad63 100644
+--- a/STM/quarkus/stm/src/main/java/org/acme/quickstart/stm/FlightServiceFactory.java
++++ b/STM/quarkus/stm/src/main/java/org/acme/quickstart/stm/FlightServiceFactory.java
+@@ -10,8 +10,7 @@ class FlightServiceFactory {
+     private FlightService flightServiceProxy;
+ 
+     private void initFlightServiceFactory() {
+-        container = new Container<>();
+-        flightServiceProxy = container.create(new FlightServiceImpl());
++        flightServiceProxy = new FlightServiceImpl();
+     }
+ 
+     FlightService getInstance() {
