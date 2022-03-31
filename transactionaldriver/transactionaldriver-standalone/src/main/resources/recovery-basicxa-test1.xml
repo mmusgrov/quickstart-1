@@ -2,6 +2,6 @@
 <properties>
     <entry key="DB_1_DatabaseDynamicClass"></entry>
     <entry key="DB_1_DatabaseURL">ds1</entry>
-    <entry key="DB_1_DatabaseUser"></entry>
-    <entry key="DB_1_DatabasePassword"></entry>
+    <entry key="DB_1_DatabaseUser">app_dec</entry>
+    <entry key="DB_1_DatabasePassword">e1bc9e7f864d</entry>
 </properties>

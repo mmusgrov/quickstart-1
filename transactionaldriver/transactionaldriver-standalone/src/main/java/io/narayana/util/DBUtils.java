@@ -56,16 +56,18 @@ public class DBUtils {
     private static final String DB_PG_XA_DATASOURCE = "org.postgresql.xa.PGXADataSource";
     private static final String DB_PG_HOST = "localhost";
     private static final int DB_PG_PORT = 5432;
+    private static final int DB_PG_PORT2 = 5433;
     private static final String DB_PG_CONNECTION = String.format("jdbc:postgresql://%s:%s/", DB_PG_HOST, DB_PG_PORT) + "%s";
+    private static final String DB_PG_CONNECTION2 = String.format("jdbc:postgresql://%s:%s/", DB_PG_HOST, DB_PG_PORT2) + "%s";
     private static final String DB_PG_USER = "test";
     private static final String DB_PG_PASSWORD = "test";
 
     private static String TEST_TABLE_NAME = "TXN_DRIVER_TEST";
-    private static String CREATE_TABLE = String.format("CREATE TABLE %s(id int primary key, value2 varchar(42))", TEST_TABLE_NAME);
-    private static String DROP_TABLE = String.format("DROP TABLE %s", TEST_TABLE_NAME);
+    private static String CREATE_TABLE = String.format("CREATE TABLE if not exists %s(id int primary key, value2 varchar(42))", TEST_TABLE_NAME);
+    private static String DROP_TABLE = String.format("DROP TABLE if exists %s", TEST_TABLE_NAME);
     private static String SELECT_QUERY = String.format("SELECT * FROM %s", TEST_TABLE_NAME);
 
-    private static final boolean isH2 = true;
+    private static final boolean isH2 = false;
     public static final String DB_DRIVER = isH2 ? DB_H2_DRIVER : DB_PG_DRIVER;
     public static final String DB_XA_DATASOURCE = isH2 ? DB_H2_XA_DATASOURCE : DB_PG_XA_DATASOURCE;
     public static final String DB_CONNECTION = isH2 ? DB_H2_CONNECTION : DB_PG_CONNECTION;
@@ -115,7 +117,7 @@ public class DBUtils {
     }
 
     private static Connection getPgConnection(String dbname) {
-        return getConnection(DB_PG_DRIVER, DB_PG_CONNECTION, dbname, DB_PG_USER, DB_PG_PASSWORD);
+        return getConnection(DB_PG_DRIVER, dbname.equals(DB_1) ? DB_PG_CONNECTION : DB_PG_CONNECTION2, dbname, DB_PG_USER, DB_PG_PASSWORD);
     }
 
     private static Connection getConnection(String driver, String formatUrl, String dbname, String user, String pass) {
@@ -149,10 +151,10 @@ public class DBUtils {
     private static XADataSource getPgXADatasource(String dbName) {
         PGXADataSource ds = new PGXADataSource();
         ds.setServerName(DB_PG_HOST);
-        ds.setPortNumber(DB_PG_PORT);
+        ds.setPortNumber(dbName.equals(DB_1) ?  DB_PG_PORT : DB_PG_PORT2);
         ds.setDatabaseName(dbName);
-        ds.setUser(DB_H2_USER);
-        ds.setPassword(DB_H2_PASSWORD);
+        ds.setUser(DB_PG_USER);
+        ds.setPassword(DB_PG_PASSWORD);
         return ds;
     }
 }

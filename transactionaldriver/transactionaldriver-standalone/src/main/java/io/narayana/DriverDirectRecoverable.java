@@ -60,7 +60,7 @@ public class DriverDirectRecoverable {
         DriverManager.registerDriver(DBUtils.TXN_DRIVER_INSTANCE);
 
         //jdbc:arjuna: <path to properties file>
-        String jdbcUrl1 = TransactionalDriver.arjunaDriver + "target/classes/ds1.h2.properties";
+        String jdbcUrl1 = TransactionalDriver.arjunaDriver + "target/classes/ds1.pg.properties";
         Properties props1 = new Properties();
         props1.put(TransactionalDriver.dynamicClass, PropertyFileDynamicClass.class.getName());
         props1.put(TransactionalDriver.userName, DBUtils.DB_USER);
@@ -69,7 +69,7 @@ public class DriverDirectRecoverable {
         props1.put(TransactionalDriver.maxConnections, "50"); // JBTM-2976
         conn1 = DriverManager.getConnection(jdbcUrl1, props1);
 
-        String jdbcUrl2 = TransactionalDriver.arjunaDriver + "target/classes/ds2.h2.properties";
+        String jdbcUrl2 = TransactionalDriver.arjunaDriver + "target/classes/ds2.pg.properties";
         Properties props2 = new Properties();
         props2.put(TransactionalDriver.dynamicClass, PropertyFileDynamicClass.class.getName());
         props2.put(TransactionalDriver.userName, DBUtils.DB_USER);
