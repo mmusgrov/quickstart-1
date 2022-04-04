@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
     <entry key="DB_1_DatabaseDynamicClass"></entry>
-    <entry key="DB_1_DatabaseURL">ds1</entry>
-    <entry key="DB_1_DatabaseUser">app_dec</entry>
-    <entry key="DB_1_DatabasePassword">e1bc9e7f864d</entry>
+    <entry key="DB_1_DatabaseURL">test1</entry>
+    <entry key="DB_1_DatabaseUser">test</entry>
+    <entry key="DB_1_DatabasePassword">test</entry>
 </properties>

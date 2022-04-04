@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
-    <entry key="DatabaseJNDIName">ds1</entry>
-    <entry key="UserName">app_dev</entry>
-    <entry key="Password">e1bc9e7f864d</entry>
+    <entry key="DatabaseJNDIName">test1</entry>
+    <entry key="UserName">test</entry>
+    <entry key="Password">test</entry>
 </properties>
