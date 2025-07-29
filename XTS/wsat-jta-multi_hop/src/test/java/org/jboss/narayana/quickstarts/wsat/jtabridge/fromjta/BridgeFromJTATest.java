@@ -2,6 +2,7 @@ package org.jboss.narayana.quickstarts.wsat.jtabridge.fromjta;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.narayana.quickstarts.wsat.jtabridge.ConnectionUtil;
 import org.jboss.narayana.quickstarts.wsat.jtabridge.first.FirstServiceATImpl;
 import org.jboss.narayana.quickstarts.wsat.jtabridge.first.jaxws.FirstServiceAT;
 import org.jboss.narayana.quickstarts.wsat.jtabridge.second.SecondServiceATImpl;
@@ -47,6 +48,7 @@ public class BridgeFromJTATest {
                 .addPackages(true, FirstServiceATImpl.class.getPackage())
                 .addPackages(true, SecondServiceATImpl.class.getPackage())
                 .addPackages(true, FirstClient.class.getPackage())
+                .addPackages(true, ConnectionUtil.class.getPackage())
                 .addAsWebInfResource(new File("src/main/resources/META-INF/persistence.xml"), "classes/META-INF/persistence.xml");
 
         archive.setManifest(new StringAsset(ManifestMF));

@@ -1,5 +1,6 @@
 package org.jboss.narayana.quickstarts.wsat.jtabridge.first;
 
+import org.jboss.narayana.quickstarts.wsat.jtabridge.ConnectionUtil;
 import org.jboss.narayana.quickstarts.wsat.jtabridge.first.jaxws.FirstServiceAT;
 import org.jboss.narayana.quickstarts.wsat.jtabridge.second.SecondClient;
 import org.jboss.narayana.quickstarts.wsat.jtabridge.second.jaxws.SecondServiceAT;
@@ -14,6 +15,13 @@ import jakarta.jws.soap.SOAPBinding;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  * @author paul.robinson@redhat.com, 2012-10-29
  */
@@ -25,6 +33,8 @@ import jakarta.persistence.PersistenceContext;
 public class FirstServiceATImpl implements FirstServiceAT {
 
     private static final int ENTITY_ID = 1;
+    private boolean useEntityManager;//= true;
+    private boolean forgetToCloseConnection = true; // leak connections
 
     @PersistenceContext
     protected EntityManager em;
@@ -43,9 +53,34 @@ public class FirstServiceATImpl implements FirstServiceAT {
         System.out.println("[SERVICE_1] First service invoked to increment the counter by '" + num + "'");
 
         System.out.println("[SERVICE_1] Using the JPA Entity Manager to update the counter within a JTA transaction");
+
         FirstCounterEntity entityFirst = lookupCounterEntity();
-        entityFirst.incrementCounter(num);
-        em.merge(entityFirst);
+        int id = entityFirst.getId();
+        int counter = entityFirst.getCounter();
+        if (useEntityManager) {
+            entityFirst.incrementCounter(num);
+            em.merge(entityFirst);
+        } else {
+            DataSource ds = lookupDataSource();
+            Connection connection;
+
+            try {
+                connection = ds.getConnection();
+                try (Statement st = connection.createStatement()) {
+                    st.execute(String.format("update FirstCounterEntity set counter=%d where id=%d",
+                            counter + num, id));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    System.out.println("[SERVICE_1] forget to close is " + forgetToCloseConnection);
+                    if (!forgetToCloseConnection) {
+                        connection.close();
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         System.out.println("[SERVICE_1] Calling incrementCounter on the WS secondClient stub. The registered interceptor will bridge rom JTA to WS-AT");
         getSecondClient().incrementCounter(num);
@@ -56,11 +91,28 @@ public class FirstServiceATImpl implements FirstServiceAT {
     public int getFirstCounter() {
         System.out.println("[SERVICE_1] getFirstCounter() invoked");
         FirstCounterEntity firstCounterEntity = lookupCounterEntity();
-        if (firstCounterEntity == null) {
-            return -1;
-        }
 
         return firstCounterEntity.getCounter();
+        /*
+        if (useEntityManager) {
+            return firstCounterEntity.getCounter();
+        } else {
+            int id = firstCounterEntity.getId();
+            DataSource ds = lookupDataSource();
+
+            try (Connection connection = ds.getConnection(); Statement st = connection.createStatement()) {
+                String query = String.format("select counter from FirstCounterEntity where id=%d", id);
+                ResultSet rset = st.executeQuery(query);
+
+                if (rset.next()) {
+                    return rset.getInt("counter");
+                } else {
+                    return 0;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }*/
     }
 
     @WebMethod
@@ -100,4 +152,11 @@ public class FirstServiceATImpl implements FirstServiceAT {
         return secondClient;
     }
 
+    private DataSource lookupDataSource() {
+        try {
+            return ConnectionUtil.lookupDataSource();
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

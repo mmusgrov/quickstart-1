@@ -28,3 +28,56 @@ Raw XTS API Demo
 ----------------
 An example that demonstrates the usage of the low-level raw API. This example is good if you need to develop your own WS-AT
 or WS-BA participants or if you need to use a particular feature not yet available in the higher-level APIs.
+
+Using an XA datasource
+----------------------
+To test with an XA datasource I ran `mvn clean test -Parq -f wsat-jta-multi_hop/pom.xml` after making the following changes to standalone-xts.xml:
+
+[mmusgrov: XTS] ((HEAD detached at 6.0.4.Final)) $ diff $JBOSS_HOME/docs/examples/configs/standalone-xts.xml $JBOSS_HOME/standalone/configuration/standalone-xts.xml
+87a88,99
+>             <logger category="org.jboss.jbossts.txbridge">
+>                 <level name="TRACE"/>
+>             </logger>
+>             <logger category="jboss.jdbc.spy">
+>                 <level name="TRACE"/>
+>             </logger>
+>             <logger category="org.jboss.jca.core.connectionmanager">
+>                 <level name="TRACE"/>
+>             </logger>
+>             <logger category="org.jboss.jca">
+>                 <level name="TRACE"/>
+>             </logger>
+128a141,172
+>                 <xa-datasource jndi-name="java:jboss/datasources/H2XADS1" pool-name="java:jboss/datasources/H2XADS1" enabled="true" spy="true" use-ccm="false">
+>                     <xa-datasource-property name="URL">
+>                         jdbc:h2:file:~/xaqs1;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=${wildfly.h2.compatibility.mode:REGULAR}
+>                     </xa-datasource-property>
+>                     <driver>h2</driver>
+>                     <xa-pool>
+>                         <is-same-rm-override>false</is-same-rm-override>
+>                         <interleaving>false</interleaving>
+>                         <pad-xid>false</pad-xid>
+>                         <wrap-xa-resource>true</wrap-xa-resource>
+>                     </xa-pool>
+>                     <security>
+>                         <user-name>sa</user-name>
+>                         <password>sa</password>
+>                     </security>
+>                     <recovery>
+>                         <recover-credential>
+>                             <user-name>sa</user-name>
+>                             <password>sa</password>
+>                         </recover-credential>
+>                     </recovery>
+>                     <validation>
+>                         <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.novendor.JDBC4ValidConnectionChecker"/>
+>                         <validate-on-match>true</validate-on-match>
+>                         <background-validation>false</background-validation>
+>                         <exception-sorter class-name="database_specific_ExceptionSorter_here"/>
+>                     </validation>
+>                     <statement>
+>                         <prepared-statement-cache-size>0</prepared-statement-cache-size>
+>                         <share-prepared-statements>false</share-prepared-statements>
+>                     </statement>
+>                 </xa-datasource>
+
